@@ -12,3 +12,6 @@ receivers:
 
 processors:
   - gomod: go.opentelemetry.io/collector/processor/batchprocessor v0.91.0
+
+replaces:
+  - github.com/hydrolix/hydrolix-exporter v0.0.1 => ./hydrolixexporter
