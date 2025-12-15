@@ -1,0 +1,5 @@
+# Ensure secrets are not accidently commited to a repo
+.env
+
+# Jetbrains artifact
+.idea
