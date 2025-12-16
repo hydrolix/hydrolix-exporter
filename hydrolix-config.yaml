@@ -47,28 +47,19 @@ exporters:
     hdx_password: ${env:HYDROLIX_PASSWORD}
     timeout: 30s
 
-  # Debug exporter to see what's being sent
-  debug:
-    verbosity: detailed
-
 service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [batch, resource]
-      exporters: [hydrolix/traces, debug]
+      processors: [batch]
+      exporters: [hydrolix/traces]
 
     metrics:
       receivers: [otlp]
-      processors: [batch, resource]
-      exporters: [hydrolix/metrics, debug]
+      processors: [batch]
+      exporters: [hydrolix/metrics]
 
     logs:
       receivers: [otlp]
-      processors: [batch, resource]
-      exporters: [hydrolix/logs, debug]
-
-# Debug logs if needed
-#  telemetry:
-#    logs:
-#      level: debug
+      processors: [batch]
+      exporters: [hydrolix/logs]
