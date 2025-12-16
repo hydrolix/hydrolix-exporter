@@ -21,9 +21,7 @@ hydrolix/metrics:
     hdx_password: ${env:HYDROLIX_PASSWORD}
 ```
 
-## Deployment
-
-### Simple deployment instructions
+## Deployment instructions
 
 1. Pull the image from GCP 
 
