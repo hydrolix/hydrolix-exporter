@@ -1,1 +1,4 @@
 .idea
+.env
+# local test config
+local.yaml
