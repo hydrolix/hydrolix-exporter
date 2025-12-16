@@ -26,7 +26,7 @@ RUN apk --no-cache add ca-certificates
 WORKDIR /
 
 # Copy the built collector from the builder stage
-COPY --from=builder /build/dist/otelcol-hydrolix /otelcol-hydrolix
+COPY --from=builder /build/otelcol-hydrolix /otelcol-hydrolix
 
 # Copy the default configuration
 COPY hydrolix-config.yaml /etc/otelcol/config.yaml

@@ -1,4 +1,4 @@
-module github.com/open-telemetry/opentelemetry-collector-contrib/exporter/hydrolixexporter
+module github.com/hydrolix/hydrolix-exporter/hydrolixexporter
 
 go 1.25.3
 
