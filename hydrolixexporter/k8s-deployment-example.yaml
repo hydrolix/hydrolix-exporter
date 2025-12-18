@@ -45,8 +45,7 @@ data:
         endpoint: ${HYDROLIX_ENDPOINT}
         hdx_table: cicd.metrics
         hdx_transform: tf_cicd_metrics_v2
-        hdx_username: ${HYDROLIX_USERNAME}
-        hdx_password: ${HYDROLIX_PASSWORD}
+        hdx_bearer_token: ${HYDROLIX_BEARER_TOKEN}
         timeout: 30s
 
       # Keep debug exporter for troubleshooting
@@ -74,8 +73,7 @@ metadata:
 type: Opaque
 stringData:
   endpoint: "https://argus.hydrolix.live/ingest/event"
-  username: "your-username"
-  password: "your-password"
+  hdx_bearer_token: "your bearer token"
 
 ---
 apiVersion: apps/v1
@@ -129,16 +127,11 @@ spec:
                 secretKeyRef:
                   name: hydrolix-credentials
                   key: endpoint
-            - name: HYDROLIX_USERNAME
+            - name: HYDROLIX_BEARER_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: hydrolix-credentials
-                  key: username
-            - name: HYDROLIX_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: hydrolix-credentials
-                  key: password
+                  key: hdx_bearer_token
           volumeMounts:
             - name: otel-collector-config-vol
               mountPath: /etc/otel-collector-config

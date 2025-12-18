@@ -23,21 +23,17 @@ The following configuration options are supported:
 - `endpoint` (required): The Hydrolix ingest endpoint URL.
 - `hdx_table` (required): The Hydrolix table name where data will be written.
 - `hdx_transform` (required): The Hydrolix transform to apply to incoming data.
-- `hdx_username` (required): Authentication username for Hydrolix.
-- `hdx_password` (required): Authentication password for Hydrolix.
+- `hdx_bearer_token` (required): Authentication token for Hydrolix.
 - `timeout` (optional): HTTP client timeout. Default is 30s.
 
 ### Example Configuration
 
 ```yaml
-exporters:
-  hydrolix:
-    endpoint: https://ingest.hydrolix.example.com
-    hdx_table: otel_data
-    hdx_transform: otel_transform
-    hdx_username: ${env:HYDROLIX_USERNAME}
-    hdx_password: ${env:HYDROLIX_PASSWORD}
-    timeout: 30s
+hydrolix/metrics:
+  endpoint: https://your-hydrolix-cluster.hydrolix.io/ingest/event
+  hdx_table: Your hdx table name here
+  hdx_transform: your related transform
+  hdx_bearer_token: ${env:HYDROLIX_BEARER_TOKEN}
 ```
 
 ## Data Model
@@ -91,12 +87,12 @@ processors:
     send_batch_size: 1024
 
 exporters:
-  hydrolix:
-    endpoint: https://ingest.hydrolix.example.com
-    hdx_table: otel_logs
-    hdx_transform: otel_logs_transform
-    hdx_username: ${env:HYDROLIX_USERNAME}
-    hdx_password: ${env:HYDROLIX_PASSWORD}
+  hydrolix/traces:
+    endpoint: https://your-hydrolix-cluster.hydrolix.io/ingest/event
+    hdx_table: myorg.spans
+    hdx_transform: tf_otel_spans
+    hdx_bearer_token: ${env:HYDROLIX_BEARER_TOKEN}
+    timeout: 30s
 
 service:
   pipelines:
@@ -116,15 +112,15 @@ service:
 
 ## Authentication
 
-The exporter uses HTTP Basic Authentication. Credentials are sent with each request using the configured `hdx_username` and `hdx_password`.
+The exporter uses a Bearer token for Authentication. Credentials are set with 
+each request using the configured `hdx_beaer_token`.
 
 It is recommended to use environment variables for sensitive credentials:
 
 ```yaml
 exporters:
-  hydrolix:
-    hdx_username: ${env:HYDROLIX_USERNAME}
-    hdx_password: ${env:HYDROLIX_PASSWORD}
+  hydrolix/traces:
+    hdx_bearer_token: ${env:HYDROLIX_BEARER_TOKEN}
 ```
 
 ## Headers
@@ -133,7 +129,7 @@ The exporter sets the following HTTP headers on each request:
 - `Content-Type: application/json`
 - `x-hdx-table`: The configured table name
 - `x-hdx-transform`: The configured transform name
-- `Authorization`: Basic authentication credentials
+- `Authorization`: Bearer token authentication credentials
 
 ## Best Practices
 

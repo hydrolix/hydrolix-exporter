@@ -13,16 +13,14 @@
 - endpoint - The Hydrolix cluster ingest endpoint that you would like to send traces to
 - hdx_table - The Hydrolix table name where telemetry data will be written
 - hdx_transform - The Hydrolix transform name to apply to incoming data
-- hdx_username - Username for authentication to the Hydrolix cluster
-- hdx_password - Password for authentication to the Hydrolix cluster 
+- hdx_bearer_token - Bearer token for authentication to the Hydrolix cluster
 
 ```
 hydrolix/metrics:
     endpoint: https://your-hydrolix-cluster.hydrolix.io/ingest/event
     hdx_table: Your hdx table name here
     hdx_transform: your related transform
-    hdx_username: ${env:HYDROLIX_USERNAME}
-    hdx_password: ${env:HYDROLIX_PASSWORD}
+    hdx_bearer_token: ${env:HYDROLIX_BEARER_TOKEN}
 ```
 
 ## Deployment instructions
@@ -49,15 +47,13 @@ hydrolix/metrics:
     
         Export the environment variables
         ``` 
-          export HYDROLIX_PASSWORD=password here
-          export HYDROLIX_USERNAME=cluster url here
+          export HYDROLIX_BEARER_TOKEN=token here
         ```
 
         ```bash 
         docker run --name otel-collector -p 4317:4317 \
           -p 4318:4318 \
-          -e HYDROLIX_PASSWORD \
-          -e HYDROLIX_USERNAME \
+          -e HYDROLIX_BEARER_TOKEN \
           -v [Absolute path to your otel config]:/etc/otelcol/config.yaml \
           us-docker.pkg.dev/hdx-art/t/hdx-collector:0.1.0
         ```
@@ -77,8 +73,7 @@ hydrolix/metrics:
         - "4317:4317"
         - "4318:4318"
         environment:
-        - HYDROLIX_USERNAME=${HYDROLIX_USERNAME}
-        - HYDROLIX_PASSWORD=${HYDROLIX_PASSWORD}
+        - HYDROLIX_BEARER_TOKEN=${HYDROLIX_BEARER_TOKEN}
         # or use env_file:
         env_file:
         - .env

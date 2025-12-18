@@ -93,7 +93,13 @@ func (e *metricsExporter) pushMetrics(ctx context.Context, md pmetric.Metrics) e
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("x-hdx-table", e.config.HDXTable)
 	req.Header.Set("x-hdx-transform", e.config.HDXTransform)
-	req.SetBasicAuth(e.config.HDXUsername, e.config.HDXPassword)
+
+	// Use Bearer token if available, otherwise fall back to Basic Auth
+	if e.config.HDXBearerToken != "" {
+		req.Header.Set("Authorization", "Bearer "+e.config.HDXBearerToken)
+	} else {
+		req.SetBasicAuth(e.config.HDXUsername, e.config.HDXPassword)
+	}
 
 	resp, err := e.client.Do(req)
 	if err != nil {
