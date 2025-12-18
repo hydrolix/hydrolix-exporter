@@ -1,9 +1,5 @@
-<<<<<<< Updated upstream
-.idea
-=======
 .idea
 .env
 # local test config
 local.yaml
 logs.txt
->>>>>>> Stashed changes
