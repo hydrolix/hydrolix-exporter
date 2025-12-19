@@ -23,17 +23,32 @@ The following configuration options are supported:
 - `endpoint` (required): The Hydrolix ingest endpoint URL.
 - `hdx_table` (required): The Hydrolix table name where data will be written.
 - `hdx_transform` (required): The Hydrolix transform to apply to incoming data.
-- `hdx_bearer_token` (required): Authentication token for Hydrolix.
+- `hdx_bearer_token` (optional): Bearer token for authentication. Takes precedence if both token and username/password are provided.
+- `hdx_username` (optional): Username for Basic Authentication.
+- `hdx_password` (optional): Password for Basic Authentication.
 - `timeout` (optional): HTTP client timeout. Default is 30s.
+
+**Note**: You must provide either `hdx_bearer_token` OR both `hdx_username` and `hdx_password` for authentication.
 
 ### Example Configuration
 
+**Using Bearer Token (recommended):**
 ```yaml
 hydrolix/metrics:
   endpoint: https://your-hydrolix-cluster.hydrolix.io/ingest/event
-  hdx_table: Your hdx table name here
-  hdx_transform: your related transform
+  hdx_table: your.table.name
+  hdx_transform: your_transform
   hdx_bearer_token: ${env:HYDROLIX_BEARER_TOKEN}
+```
+
+**Using Basic Authentication:**
+```yaml
+hydrolix/metrics:
+  endpoint: https://your-hydrolix-cluster.hydrolix.io/ingest/event
+  hdx_table: your.table.name
+  hdx_transform: your_transform
+  hdx_username: ${env:HYDROLIX_USERNAME}
+  hdx_password: ${env:HYDROLIX_PASSWORD}
 ```
 
 ## Data Model
@@ -44,8 +59,8 @@ The exporter sends metrics with the following fields:
 - Metric name, description, and unit
 - Metric type (gauge, sum, histogram, exponential histogram, summary)
 - Timestamp and values
-- Service name and resource attributes
-- Metric-specific attributes
+- Service name and resource attributes as flat key-value objects
+- Metric-specific attributes as flat key-value objects
 - Optional trace context (traceId, spanId) extracted from metric attributes
 
 ### Traces
@@ -55,8 +70,8 @@ The exporter sends traces (spans) with the following fields:
 - Span name and kind
 - Start time and duration
 - Status code and message
-- Service name and resource attributes
-- Span attributes
+- Service name and resource attributes as flat key-value objects
+- Span attributes as flat key-value objects
 - Span events (logs attached to spans)
 
 ### Logs
@@ -65,10 +80,27 @@ The exporter sends logs with the following fields:
 - Timestamp and observed timestamp
 - Severity number and text
 - Log body
-- Service name and resource attributes
-- Log attributes
+- Service name and resource attributes as flat key-value objects
+- Log attributes as flat key-value objects
 - Optional trace context (traceId, spanId, traceFlags)
 - HTTP-specific attributes (status code, route, method)
+
+### Attribute Format
+
+All attributes (tags, serviceTags, scope_attributes) are exported as flat JSON objects for efficient querying:
+
+```json
+{
+  "tags": {
+    "http.method": "GET",
+    "http.status_code": "200"
+  },
+  "serviceTags": {
+    "service.name": "api-gateway",
+    "service.version": "1.2.3"
+  }
+}
+```
 
 ## Example Pipeline Configuration
 
@@ -112,10 +144,11 @@ service:
 
 ## Authentication
 
-The exporter uses a Bearer token for Authentication. Credentials are set with 
-each request using the configured `hdx_beaer_token`.
+The exporter supports two authentication methods:
 
-It is recommended to use environment variables for sensitive credentials:
+### Bearer Token Authentication (Recommended)
+
+Uses a bearer token for authentication. If `hdx_bearer_token` is provided, it takes precedence over username/password.
 
 ```yaml
 exporters:
@@ -123,13 +156,26 @@ exporters:
     hdx_bearer_token: ${env:HYDROLIX_BEARER_TOKEN}
 ```
 
+### Basic Authentication
+
+Uses username and password for HTTP Basic Authentication. This is used as a fallback when no bearer token is provided.
+
+```yaml
+exporters:
+  hydrolix/traces:
+    hdx_username: ${env:HYDROLIX_USERNAME}
+    hdx_password: ${env:HYDROLIX_PASSWORD}
+```
+
+**Note**: It is recommended to use environment variables for sensitive credentials.
+
 ## Headers
 
 The exporter sets the following HTTP headers on each request:
 - `Content-Type: application/json`
 - `x-hdx-table`: The configured table name
 - `x-hdx-transform`: The configured transform name
-- `Authorization`: Bearer token authentication credentials
+- `Authorization`: Either `Bearer <token>` or Basic Authentication credentials
 
 ## Best Practices
 

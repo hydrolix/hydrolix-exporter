@@ -20,27 +20,27 @@ type logsExporter struct {
 }
 
 type HydrolixLog struct {
-	Timestamp             uint64                   `json:"timestamp"`
-	ObservedTimestamp     uint64                   `json:"observed_timestamp,omitempty"`
-	TraceID               string                   `json:"traceId,omitempty"`
-	SpanID                string                   `json:"spanId,omitempty"`
-	TraceFlags            uint32                   `json:"trace_flags,omitempty"`
-	SeverityText          string                   `json:"severity_text,omitempty"`
-	SeverityNumber        int32                    `json:"severity_number,omitempty"`
-	Body                  string                   `json:"body,omitempty"`
-	LogAttributes         []map[string]interface{} `json:"tags"`
-	ResourceAttributes    []map[string]interface{} `json:"serviceTags"`
-	ResourceSchemaUrl     string                   `json:"resource_schema_url,omitempty"`
-	ScopeName             string                   `json:"scope_name,omitempty"`
-	ScopeVersion          string                   `json:"scope_version,omitempty"`
-	ScopeAttributes       []map[string]interface{} `json:"scope_attributes,omitempty"`
-	ScopeDroppedAttrCount uint32                   `json:"scope_dropped_attr_count,omitempty"`
-	ScopeSchemaUrl        string                   `json:"scope_schema_url,omitempty"`
-	Flags                 uint32                   `json:"flags,omitempty"`
-	ServiceName           string                   `json:"serviceName,omitempty"`
-	HTTPStatusCode        string                   `json:"httpStatusCode,omitempty"`
-	HTTPRoute             string                   `json:"httpRoute,omitempty"`
-	HTTPMethod            string                   `json:"httpMethod,omitempty"`
+	Timestamp             uint64                 `json:"timestamp"`
+	ObservedTimestamp     uint64                 `json:"observed_timestamp,omitempty"`
+	TraceID               string                 `json:"traceId,omitempty"`
+	SpanID                string                 `json:"spanId,omitempty"`
+	TraceFlags            uint32                 `json:"trace_flags,omitempty"`
+	SeverityText          string                 `json:"severity_text,omitempty"`
+	SeverityNumber        int32                  `json:"severity_number,omitempty"`
+	Body                  string                 `json:"body,omitempty"`
+	LogAttributes         map[string]interface{} `json:"tags"`
+	ResourceAttributes    map[string]interface{} `json:"serviceTags"`
+	ResourceSchemaUrl     string                 `json:"resource_schema_url,omitempty"`
+	ScopeName             string                 `json:"scope_name,omitempty"`
+	ScopeVersion          string                 `json:"scope_version,omitempty"`
+	ScopeAttributes       map[string]interface{} `json:"scope_attributes,omitempty"`
+	ScopeDroppedAttrCount uint32                 `json:"scope_dropped_attr_count,omitempty"`
+	ScopeSchemaUrl        string                 `json:"scope_schema_url,omitempty"`
+	Flags                 uint32                 `json:"flags,omitempty"`
+	ServiceName           string                 `json:"serviceName,omitempty"`
+	HTTPStatusCode        string                 `json:"httpStatusCode,omitempty"`
+	HTTPRoute             string                 `json:"httpRoute,omitempty"`
+	HTTPMethod            string                 `json:"httpMethod,omitempty"`
 }
 
 func newLogsExporter(config *Config, set exporter.Settings) *logsExporter {
