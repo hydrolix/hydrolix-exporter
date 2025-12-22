@@ -160,7 +160,7 @@ func (e *metricsExporter) convertToHydrolixMetrics(md pmetric.Metrics) []Hydroli
 	return metrics
 }
 
-func (e *metricsExporter) convertGauge(metric pmetric.Metric, resourceAttrs []map[string]interface{}, resourceSchemaUrl string, scopeAttrs []map[string]interface{}, scope pcommon.InstrumentationScope, scopeSchemaUrl, serviceName string) []HydrolixMetric {
+func (e *metricsExporter) convertGauge(metric pmetric.Metric, resourceAttrs map[string]interface{}, resourceSchemaUrl string, scopeAttrs map[string]interface{}, scope pcommon.InstrumentationScope, scopeSchemaUrl, serviceName string) []HydrolixMetric {
 	var metrics []HydrolixMetric
 
 	gauge := metric.Gauge()
@@ -205,7 +205,7 @@ func (e *metricsExporter) convertGauge(metric pmetric.Metric, resourceAttrs []ma
 	return metrics
 }
 
-func (e *metricsExporter) convertSum(metric pmetric.Metric, resourceAttrs []map[string]interface{}, resourceSchemaUrl string, scopeAttrs []map[string]interface{}, scope pcommon.InstrumentationScope, scopeSchemaUrl, serviceName string) []HydrolixMetric {
+func (e *metricsExporter) convertSum(metric pmetric.Metric, resourceAttrs map[string]interface{}, resourceSchemaUrl string, scopeAttrs map[string]interface{}, scope pcommon.InstrumentationScope, scopeSchemaUrl, serviceName string) []HydrolixMetric {
 	var metrics []HydrolixMetric
 
 	sum := metric.Sum()
@@ -252,7 +252,7 @@ func (e *metricsExporter) convertSum(metric pmetric.Metric, resourceAttrs []map[
 	return metrics
 }
 
-func (e *metricsExporter) convertHistogram(metric pmetric.Metric, resourceAttrs []map[string]interface{}, resourceSchemaUrl string, scopeAttrs []map[string]interface{}, scope pcommon.InstrumentationScope, scopeSchemaUrl, serviceName string) []HydrolixMetric {
+func (e *metricsExporter) convertHistogram(metric pmetric.Metric, resourceAttrs map[string]interface{}, resourceSchemaUrl string, scopeAttrs map[string]interface{}, scope pcommon.InstrumentationScope, scopeSchemaUrl, serviceName string) []HydrolixMetric {
 	var metrics []HydrolixMetric
 
 	histogram := metric.Histogram()
@@ -297,7 +297,7 @@ func (e *metricsExporter) convertHistogram(metric pmetric.Metric, resourceAttrs 
 	return metrics
 }
 
-func (e *metricsExporter) convertExponentialHistogram(metric pmetric.Metric, resourceAttrs []map[string]interface{}, resourceSchemaUrl string, scopeAttrs []map[string]interface{}, scope pcommon.InstrumentationScope, scopeSchemaUrl, serviceName string) []HydrolixMetric {
+func (e *metricsExporter) convertExponentialHistogram(metric pmetric.Metric, resourceAttrs map[string]interface{}, resourceSchemaUrl string, scopeAttrs map[string]interface{}, scope pcommon.InstrumentationScope, scopeSchemaUrl, serviceName string) []HydrolixMetric {
 	var metrics []HydrolixMetric
 
 	expHistogram := metric.ExponentialHistogram()
@@ -354,7 +354,7 @@ func (e *metricsExporter) convertExponentialHistogram(metric pmetric.Metric, res
 	return metrics
 }
 
-func (e *metricsExporter) convertSummary(metric pmetric.Metric, resourceAttrs []map[string]interface{}, resourceSchemaUrl string, scopeAttrs []map[string]interface{}, scope pcommon.InstrumentationScope, scopeSchemaUrl, serviceName string) []HydrolixMetric {
+func (e *metricsExporter) convertSummary(metric pmetric.Metric, resourceAttrs map[string]interface{}, resourceSchemaUrl string, scopeAttrs map[string]interface{}, scope pcommon.InstrumentationScope, scopeSchemaUrl, serviceName string) []HydrolixMetric {
 	var metrics []HydrolixMetric
 
 	summary := metric.Summary()
