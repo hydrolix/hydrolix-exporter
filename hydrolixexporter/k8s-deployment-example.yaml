@@ -1,127 +1,108 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: otel-incident-config
-  namespace: github-runner
+  name: otelcol-hydrolix-config
+  namespace: your-namespace
 data:
   config.yaml: |
     receivers:
-      kubeletstats:
-        collection_interval: 60s
-        auth_type: "serviceAccount"
-        endpoint: "https://${env:K8S_NODE_IP}:10250"
-        insecure_skip_verify: true
-        metric_groups:
-          - pod
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+          http:
+            endpoint: 0.0.0.0:4318
 
     processors:
-      groupbyattrs:
-        keys:
-          - k8s.namespace.name
-          - k8s.deployment.name
-
-      filter:
-        metrics:
-          include:
-            match_type: regexp
-            metric_names:
-              - k8s\.pod\.phase
-
-      resource:
-        attributes:
-          - key: service.name
-            value: github-runner-health
-            action: upsert
-          - key: alert.severity
-            value: critical
-            action: upsert
-
       batch:
-        timeout: 60s
+        timeout: 10s
+        send_batch_size: 1000
 
     exporters:
-      # Using the Hydrolix exporter
-      hydrolix:
+      hydrolix/metrics:
         endpoint: ${HYDROLIX_ENDPOINT}
-        hdx_table: cicd.metrics
-        hdx_transform: tf_cicd_metrics_v2
+        hdx_table: your_project.metrics_table
+        hdx_transform: your_metrics_transform
         hdx_bearer_token: ${HYDROLIX_BEARER_TOKEN}
         timeout: 30s
 
-      # Keep debug exporter for troubleshooting
-      debug:
-        verbosity: detailed
+      hydrolix/traces:
+        endpoint: ${HYDROLIX_ENDPOINT}
+        hdx_table: your_project.traces_table
+        hdx_transform: your_traces_transform
+        hdx_bearer_token: ${HYDROLIX_BEARER_TOKEN}
+        timeout: 30s
+
+      hydrolix/logs:
+        endpoint: ${HYDROLIX_ENDPOINT}
+        hdx_table: your_project.logs_table
+        hdx_transform: your_logs_transform
+        hdx_bearer_token: ${HYDROLIX_BEARER_TOKEN}
+        timeout: 30s
 
     service:
       telemetry:
         logs:
-          level: info  # Changed to info to see debug logs from exporter
-        metrics:
-          level: none
+          level: info
       pipelines:
+        traces:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [hydrolix/traces]
         metrics:
-          receivers: [kubeletstats]
-          processors: [filter, groupbyattrs, resource, batch]
-          exporters: [hydrolix, debug]  # Using hydrolix exporter
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [hydrolix/metrics]
+        logs:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [hydrolix/logs]
 
 ---
 apiVersion: v1
 kind: Secret
 metadata:
   name: hydrolix-credentials
-  namespace: github-runner
+  namespace: your-namespace
 type: Opaque
 stringData:
-  endpoint: "https://argus.hydrolix.live/ingest/event"
-  hdx_bearer_token: "your bearer token"
+  endpoint: "https://your-cluster.hydrolix.live/ingest/event"
+  hdx_bearer_token: "your-bearer-token-here"
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: runner-incident-monitor
-  namespace: github-runner
+  name: otelcol-hydrolix
+  namespace: your-namespace
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: runner-incident-monitor
+      app: otelcol-hydrolix
   template:
     metadata:
       labels:
-        app: runner-incident-monitor
+        app: otelcol-hydrolix
     spec:
-      serviceAccountName: runner-incident-monitor
-      hostNetwork: true  # REQUIRED for kubeletstats
-      # If using private registry, uncomment:
-      # imagePullSecrets:
-      #   - name: regcred
       containers:
-        - name: otel-collector
-          # CHANGE THIS to your custom image
-          image: ghcr.io/your-username/otel-collector-hydrolix:latest
-          imagePullPolicy: Always  # Use Always during development, IfNotPresent in production
-          command:
-            - "/otelcol-contrib"
-            - "--config=/etc/otel-collector-config/config.yaml"
+        - name: otelcol
+          image: us-docker.pkg.dev/hdx-art/t/hdx-collector:1.0.0
+          ports:
+            - containerPort: 4317
+              name: otlp-grpc
+              protocol: TCP
+            - containerPort: 4318
+              name: otlp-http
+              protocol: TCP
           resources:
             limits:
-              memory: 200Mi  # Increased for custom build
-              cpu: 200m
-              ephemeral-storage: 8Gi
+              memory: 512Mi
+              cpu: 500m
             requests:
-              memory: 100Mi
+              memory: 256Mi
               cpu: 100m
-              ephemeral-storage: 8Gi
           env:
-            - name: K8S_NODE_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: spec.nodeName
-            - name: K8S_NODE_IP
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.hostIP
             - name: HYDROLIX_ENDPOINT
               valueFrom:
                 secretKeyRef:
@@ -133,43 +114,30 @@ spec:
                   name: hydrolix-credentials
                   key: hdx_bearer_token
           volumeMounts:
-            - name: otel-collector-config-vol
-              mountPath: /etc/otel-collector-config
+            - name: config
+              mountPath: /etc/otelcol/config.yaml
+              subPath: config.yaml
       volumes:
-        - name: otel-collector-config-vol
+        - name: config
           configMap:
-            name: otel-incident-config
+            name: otelcol-hydrolix-config
 
 ---
 apiVersion: v1
-kind: ServiceAccount
+kind: Service
 metadata:
-  name: runner-incident-monitor
-  namespace: github-runner
-
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: runner-incident-monitor
-rules:
-  - apiGroups: [""]
-    resources: ["events", "pods", "nodes", "nodes/proxy", "nodes/stats"]
-    verbs: ["get", "list", "watch", "create"]
-  - apiGroups: ["metrics.k8s.io"]
-    resources: ["pods", "nodes"]
-    verbs: ["get", "list"]
-
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: runner-incident-monitor
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: runner-incident-monitor
-subjects:
-  - kind: ServiceAccount
-    name: runner-incident-monitor
-    namespace: github-runner
+  name: otelcol-hydrolix
+  namespace: your-namespace
+spec:
+  type: ClusterIP
+  selector:
+    app: otelcol-hydrolix
+  ports:
+    - name: otlp-grpc
+      port: 4317
+      targetPort: 4317
+      protocol: TCP
+    - name: otlp-http
+      port: 4318
+      targetPort: 4318
+      protocol: TCP

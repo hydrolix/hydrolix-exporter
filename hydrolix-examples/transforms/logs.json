@@ -1,0 +1,232 @@
+[
+  {
+    "name": "timestamp",
+    "datatype": {
+      "type": "epoch",
+      "index": false,
+      "primary": true,
+      "format": "ns",
+      "resolution": "ms",
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "traceId",
+    "datatype": {
+      "type": "string",
+      "index": true,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "spanId",
+    "datatype": {
+      "type": "string",
+      "index": true,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "trace_flags",
+    "datatype": {
+      "type": "int64",
+      "index": true,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "body",
+    "datatype": {
+      "type": "string",
+      "index": true,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "severity_text",
+    "datatype": {
+      "type": "string",
+      "index": true,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "severity_number",
+    "datatype": {
+      "type": "int64",
+      "index": true,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "serviceName",
+    "datatype": {
+      "type": "string",
+      "index": true,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "resource_schema_url",
+    "datatype": {
+      "type": "string",
+      "index": true,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "tags",
+    "datatype": {
+      "type": "map",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "elements": [
+        {
+          "type": "string",
+          "index": false
+        },
+        {
+          "type": "string",
+          "index": false
+        }
+      ],
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "serviceTags",
+    "datatype": {
+      "type": "map",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "elements": [
+        {
+          "type": "string",
+          "index": false
+        },
+        {
+          "type": "string",
+          "index": false
+        }
+      ],
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "httpStatusCode",
+    "datatype": {
+      "type": "int64",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "observed_timestamp",
+    "datatype": {
+      "type": "epoch",
+      "index": false,
+      "format": "ns",
+      "resolution": "ms",
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "httpRoute",
+    "datatype": {
+      "type": "string",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "httpMethod",
+    "datatype": {
+      "type": "string",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "catchall",
+    "datatype": {
+      "type": "string",
+      "index": true,
+      "catch_all": true,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  }
+]

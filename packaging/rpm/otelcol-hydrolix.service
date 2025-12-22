@@ -1,0 +1,22 @@
+[Unit]
+Description=OpenTelemetry Collector with Hydrolix Exporter
+After=network.target
+
+[Service]
+Type=simple
+User=otelcol
+Group=otelcol
+ExecStart=/usr/bin/otelcol-hydrolix --config=/etc/otelcol-hydrolix/config.yaml
+Restart=on-failure
+RestartSec=5s
+EnvironmentFile=-/etc/otelcol-hydrolix/otelcol-hydrolix.conf
+
+# Security settings
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/log/otelcol-hydrolix
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
