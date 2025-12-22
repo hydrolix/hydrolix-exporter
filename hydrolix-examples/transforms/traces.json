@@ -1,0 +1,299 @@
+[
+  {
+    "name": "timestamp",
+    "datatype": {
+      "type": "epoch",
+      "index": false,
+      "primary": true,
+      "format": "ns",
+      "resolution": "ms",
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "traceId",
+    "datatype": {
+      "type": "string",
+      "index": true,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "spanId",
+    "datatype": {
+      "type": "string",
+      "index": true,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "name",
+    "datatype": {
+      "type": "string",
+      "index": true,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "parentSpanId",
+    "datatype": {
+      "type": "string",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "serviceName",
+    "datatype": {
+      "type": "string",
+      "index": true,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "duration",
+    "datatype": {
+      "type": "int64",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "tags",
+    "datatype": {
+      "type": "map",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "elements": [
+        {
+          "type": "string",
+          "index": false
+        },
+        {
+          "type": "string",
+          "index": false
+        }
+      ],
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "logs",
+    "datatype": {
+      "type": "array",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "elements": [
+        {
+          "type": "map",
+          "index": false,
+          "elements": [
+            {
+              "type": "string",
+              "index": false
+            },
+            {
+              "type": "string",
+              "index": false
+            }
+          ]
+        }
+      ],
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "serviceTags",
+    "datatype": {
+      "type": "map",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "elements": [
+        {
+          "type": "string",
+          "index": false
+        },
+        {
+          "type": "string",
+          "index": false
+        }
+      ],
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "httpStatusCode",
+    "datatype": {
+      "type": "uint64",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "spanKind",
+    "datatype": {
+      "type": "uint64",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "spanKindString",
+    "datatype": {
+      "type": "string",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "startTime",
+    "datatype": {
+      "type": "epoch",
+      "index": false,
+      "format": "ns",
+      "resolution": "ms",
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "endTime",
+    "datatype": {
+      "type": "epoch",
+      "index": false,
+      "format": "ns",
+      "resolution": "ms",
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "httpRoute",
+    "datatype": {
+      "type": "string",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "statusCodeString",
+    "datatype": {
+      "type": "string",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "statusCode",
+    "datatype": {
+      "type": "uint64",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "statusMessage",
+    "datatype": {
+      "type": "string",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "httpMethod",
+    "datatype": {
+      "type": "string",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  }
+]

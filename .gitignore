@@ -3,3 +3,12 @@
 # local test config
 local.yaml
 logs.txt
+
+# RPM build artifacts
+*.rpm
+rpmbuild/
+
+# Credential files (keep templates only)
+*credentials*.yaml
+*credentials*.conf
+!packaging/rpm/otelcol-hydrolix.conf

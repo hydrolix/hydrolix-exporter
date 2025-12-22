@@ -1,10 +1,12 @@
 # Hydrolix OTel exporter
 
+Latest release:
+
+![Latest Tag](https://img.shields.io/github/v/tag/hydrolix/hydrolix-exporter)
+
 | Metrics | Logs | Traces | 
 | ------- | ---- | ------ |
 | [![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges) | [![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges) | [![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges) |
-
-
 
 ## Setup 
 
@@ -28,7 +30,7 @@ hydrolix/metrics:
 1. Pull the image from GCP 
 
     ```bash
-    docker pull us-docker.pkg.dev/hdx-art/t/hdx-collector:0.1.0
+    docker pull us-docker.pkg.dev/hdx-art/t/hdx-collector:1.0.0
     ```
 
 1. Create a config file
@@ -41,9 +43,11 @@ hydrolix/metrics:
     Create a [service account](https://docs.hydrolix.io/latest/self-managed/advanced-configuration/authentication-and-authorization/account-types/service-accounts-howto/)
     in your Hydrolix cluster and add the credentials to docker.
 
-1. Adding credentials to docker
+1. Deploying the collector
+    1. [Option 1] [Kubernetes deployment](KUBERNETES_DEPLOYMENT.md)
+    1. [Option 2] [RPM deployment](RPM_DEPLOYMENT.md) - For RHEL/CentOS/Fedora systems
 
-    1. Run the image manually
+    1. [Option 3] Run the image manually
     
         Export the environment variables
         ``` 
@@ -55,10 +59,10 @@ hydrolix/metrics:
           -p 4318:4318 \
           -e HYDROLIX_BEARER_TOKEN \
           -v [Absolute path to your otel config]:/etc/otelcol/config.yaml \
-          us-docker.pkg.dev/hdx-art/t/hdx-collector:0.1.0
+          us-docker.pkg.dev/hdx-art/t/hdx-collector:1.0.0
         ```
 
-    1. Docker compose
+    1. [Option 4] Docker compose
        
         Docker compose can read environment variables from the system 
         environment variables. 
@@ -80,4 +84,3 @@ hydrolix/metrics:
         volumes:
         - ./local.yaml:/etc/otelcol/config.yaml
         ```
-    1. [Kubernetes deployment](KUBERNETES_DEPLOYMENT.md)

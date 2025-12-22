@@ -1,0 +1,374 @@
+[
+  {
+    "name": "timestamp",
+    "datatype": {
+      "type": "epoch",
+      "index": false,
+      "primary": true,
+      "format": "ns",
+      "resolution": "ms",
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "name",
+    "datatype": {
+      "type": "string",
+      "index": true,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "description",
+    "datatype": {
+      "type": "string",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "unit",
+    "datatype": {
+      "type": "string",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "metric_type",
+    "datatype": {
+      "type": "string",
+      "index": true,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "start_time",
+    "datatype": {
+      "type": "epoch",
+      "index": false,
+      "format": "ns",
+      "resolution": "ms",
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "count",
+    "datatype": {
+      "type": "uint64",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "sum",
+    "datatype": {
+      "type": "uint64",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "bucket_counts",
+    "datatype": {
+      "type": "array",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "elements": [
+        {
+          "type": "uint64",
+          "index": true
+        }
+      ],
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "explicit_bounds",
+    "datatype": {
+      "type": "array",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "elements": [
+        {
+          "type": "double",
+          "index": false
+        }
+      ],
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "min",
+    "datatype": {
+      "type": "double",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "max",
+    "datatype": {
+      "type": "double",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "tags",
+    "datatype": {
+      "type": "map",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "elements": [
+        {
+          "type": "string",
+          "index": true
+        },
+        {
+          "type": "string",
+          "index": true
+        }
+      ],
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "serviceTags",
+    "datatype": {
+      "type": "map",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "elements": [
+        {
+          "type": "string",
+          "index": true
+        },
+        {
+          "type": "string",
+          "index": true
+        }
+      ],
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "value",
+    "datatype": {
+      "type": "int64",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "scale",
+    "datatype": {
+      "type": "double",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "positive",
+    "datatype": {
+      "type": "string",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "negative",
+    "datatype": {
+      "type": "string",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "serviceName",
+    "datatype": {
+      "type": "string",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "httpStatusCode",
+    "datatype": {
+      "type": "string",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "httpRoute",
+    "datatype": {
+      "type": "string",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "spanId",
+    "datatype": {
+      "type": "string",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "traceId",
+    "datatype": {
+      "type": "string",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "httpMethod",
+    "datatype": {
+      "type": "string",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "aggregation_temporality",
+    "datatype": {
+      "type": "int64",
+      "index": false,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  },
+  {
+    "name": "catchall",
+    "datatype": {
+      "type": "string",
+      "index": true,
+      "catch_all": true,
+      "format": null,
+      "resolution": null,
+      "default": null,
+      "script": null,
+      "source": null,
+      "suppress": false
+    }
+  }
+]
