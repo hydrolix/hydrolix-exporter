@@ -22,43 +22,43 @@ type metricsExporter struct {
 }
 
 type HydrolixMetric struct {
-	Name                   string                   `json:"name"`
-	Description            string                   `json:"description,omitempty"`
-	Unit                   string                   `json:"unit,omitempty"`
-	MetricType             string                   `json:"metric_type"`
-	Timestamp              uint64                   `json:"timestamp"`
-	StartTime              uint64                   `json:"start_time,omitempty"`
-	Count                  uint64                   `json:"count,omitempty"`
-	Value                  float64                  `json:"value,omitempty"`
-	BucketCounts           []uint64                 `json:"bucket_counts,omitempty"`
-	ExplicitBounds         []float64                `json:"explicit_bounds,omitempty"`
-	Min                    float64                  `json:"min,omitempty"`
-	Max                    float64                  `json:"max,omitempty"`
-	Sum                    float64                  `json:"sum,omitempty"`
-	MetricAttributes       []map[string]interface{} `json:"tags"`
-	ResourceAttributes     []map[string]interface{} `json:"serviceTags"`
-	ResourceSchemaUrl      string                   `json:"resource_schema_url,omitempty"`
-	ScopeName              string                   `json:"scope_name,omitempty"`
-	ScopeVersion           string                   `json:"scope_version,omitempty"`
-	ScopeAttributes        []map[string]interface{} `json:"scope_attributes,omitempty"`
-	ScopeDroppedAttrCount  uint32                   `json:"scope_dropped_attr_count,omitempty"`
-	ScopeSchemaUrl         string                   `json:"scope_schema_url,omitempty"`
-	Scale                  int32                    `json:"scale,omitempty"`
-	ZeroCount              uint64                   `json:"zero_count,omitempty"`
-	Positive               string                   `json:"positive,omitempty"`
-	Negative               string                   `json:"negative,omitempty"`
-	Exemplars              []Exemplar               `json:"exemplars,omitempty"`
-	Flags                  uint32                   `json:"flags,omitempty"`
-	AggregationTemporality int32                    `json:"aggregation_temporality,omitempty"`
-	IsMonotonic            bool                     `json:"is_monotonic,omitempty"`
-	Quantiles              []float64                `json:"quantiles,omitempty"`
-	QuantileValues         []float64                `json:"quantile_values,omitempty"`
-	ServiceName            string                   `json:"serviceName,omitempty"`
-	HTTPStatusCode         string                   `json:"httpStatusCode,omitempty"`
-	HTTPRoute              string                   `json:"httpRoute,omitempty"`
-	HTTPMethod             string                   `json:"httpMethod,omitempty"`
-	TraceID                string                   `json:"traceId,omitempty"`
-	SpanID                 string                   `json:"spanId,omitempty"`
+	Name                   string                 `json:"name"`
+	Description            string                 `json:"description,omitempty"`
+	Unit                   string                 `json:"unit,omitempty"`
+	MetricType             string                 `json:"metric_type"`
+	Timestamp              uint64                 `json:"timestamp"`
+	StartTime              uint64                 `json:"start_time,omitempty"`
+	Count                  uint64                 `json:"count,omitempty"`
+	Value                  float64                `json:"value,omitempty"`
+	BucketCounts           []uint64               `json:"bucket_counts,omitempty"`
+	ExplicitBounds         []float64              `json:"explicit_bounds,omitempty"`
+	Min                    float64                `json:"min,omitempty"`
+	Max                    float64                `json:"max,omitempty"`
+	Sum                    float64                `json:"sum,omitempty"`
+	MetricAttributes       map[string]interface{} `json:"tags"`
+	ResourceAttributes     map[string]interface{} `json:"serviceTags"`
+	ResourceSchemaUrl      string                 `json:"resource_schema_url,omitempty"`
+	ScopeName              string                 `json:"scope_name,omitempty"`
+	ScopeVersion           string                 `json:"scope_version,omitempty"`
+	ScopeAttributes        map[string]interface{} `json:"scope_attributes,omitempty"`
+	ScopeDroppedAttrCount  uint32                 `json:"scope_dropped_attr_count,omitempty"`
+	ScopeSchemaUrl         string                 `json:"scope_schema_url,omitempty"`
+	Scale                  int32                  `json:"scale,omitempty"`
+	ZeroCount              uint64                 `json:"zero_count,omitempty"`
+	Positive               string                 `json:"positive,omitempty"`
+	Negative               string                 `json:"negative,omitempty"`
+	Exemplars              []Exemplar             `json:"exemplars,omitempty"`
+	Flags                  uint32                 `json:"flags,omitempty"`
+	AggregationTemporality int32                  `json:"aggregation_temporality,omitempty"`
+	IsMonotonic            bool                   `json:"is_monotonic,omitempty"`
+	Quantiles              []float64              `json:"quantiles,omitempty"`
+	QuantileValues         []float64              `json:"quantile_values,omitempty"`
+	ServiceName            string                 `json:"serviceName,omitempty"`
+	HTTPStatusCode         string                 `json:"httpStatusCode,omitempty"`
+	HTTPRoute              string                 `json:"httpRoute,omitempty"`
+	HTTPMethod             string                 `json:"httpMethod,omitempty"`
+	TraceID                string                 `json:"traceId,omitempty"`
+	SpanID                 string                 `json:"spanId,omitempty"`
 }
 
 type Exemplar struct {
@@ -93,7 +93,13 @@ func (e *metricsExporter) pushMetrics(ctx context.Context, md pmetric.Metrics) e
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("x-hdx-table", e.config.HDXTable)
 	req.Header.Set("x-hdx-transform", e.config.HDXTransform)
-	req.SetBasicAuth(e.config.HDXUsername, e.config.HDXPassword)
+
+	// Use Bearer token if available, otherwise fall back to Basic Auth
+	if e.config.HDXBearerToken != "" {
+		req.Header.Set("Authorization", "Bearer "+e.config.HDXBearerToken)
+	} else {
+		req.SetBasicAuth(e.config.HDXUsername, e.config.HDXPassword)
+	}
 
 	resp, err := e.client.Do(req)
 	if err != nil {

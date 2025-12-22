@@ -20,32 +20,32 @@ type tracesExporter struct {
 }
 
 type HydrolixSpan struct {
-	TraceID            string                   `json:"traceId"`
-	SpanID             string                   `json:"spanId"`
-	Name               string                   `json:"name"`
-	ParentSpanID       string                   `json:"parentSpanId,omitempty"`
-	ServiceName        string                   `json:"serviceName,omitempty"`
-	Duration           uint64                   `json:"duration"`
-	SpanAttributes     []map[string]interface{} `json:"tags"`
-	ResourceAttributes []map[string]interface{} `json:"serviceTags"`
-	HTTPStatusCode     string                   `json:"httpStatusCode,omitempty"`
-	SpanKind           string                   `json:"spanKind"`
-	SpanKindString     string                   `json:"spanKindString"`
-	Timestamp          uint64                   `json:"timestamp"`
-	StartTime          uint64                   `json:"startTime"`
-	EndTime            uint64                   `json:"endTime"`
-	HTTPRoute          string                   `json:"httpRoute,omitempty"`
-	Logs               []TraceLog               `json:"logs,omitempty"`
-	StatusCodeString   string                   `json:"statusCodeString"`
-	StatusCode         string                   `json:"statusCode"`
-	StatusMessage      string                   `json:"statusMessage,omitempty"`
-	HTTPMethod         string                   `json:"httpMethod,omitempty"`
+	TraceID            string                 `json:"traceId"`
+	SpanID             string                 `json:"spanId"`
+	Name               string                 `json:"name"`
+	ParentSpanID       string                 `json:"parentSpanId,omitempty"`
+	ServiceName        string                 `json:"serviceName,omitempty"`
+	Duration           uint64                 `json:"duration"`
+	SpanAttributes     map[string]interface{} `json:"tags"`
+	ResourceAttributes map[string]interface{} `json:"serviceTags"`
+	HTTPStatusCode     string                 `json:"httpStatusCode,omitempty"`
+	SpanKind           string                 `json:"spanKind"`
+	SpanKindString     string                 `json:"spanKindString"`
+	Timestamp          uint64                 `json:"timestamp"`
+	StartTime          uint64                 `json:"startTime"`
+	EndTime            uint64                 `json:"endTime"`
+	HTTPRoute          string                 `json:"httpRoute,omitempty"`
+	Logs               []TraceLog             `json:"logs,omitempty"`
+	StatusCodeString   string                 `json:"statusCodeString"`
+	StatusCode         string                 `json:"statusCode"`
+	StatusMessage      string                 `json:"statusMessage,omitempty"`
+	HTTPMethod         string                 `json:"httpMethod,omitempty"`
 }
 
 type TraceLog struct {
-	Name      string                   `json:"name,omitempty"`
-	Timestamp uint64                   `json:"timestamp"`
-	Field     []map[string]interface{} `json:"field"`
+	Name      string                 `json:"name,omitempty"`
+	Timestamp uint64                 `json:"timestamp"`
+	Field     map[string]interface{} `json:"field"`
 }
 
 func newTracesExporter(config *Config, set exporter.Settings) *tracesExporter {
@@ -191,7 +191,13 @@ func (e *tracesExporter) sendToHydrolix(ctx context.Context, data []byte, table,
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("x-hdx-table", table)
 	req.Header.Set("x-hdx-transform", transform)
-	req.SetBasicAuth(e.config.HDXUsername, e.config.HDXPassword)
+
+	// Use Bearer token if available, otherwise fall back to Basic Auth
+	if e.config.HDXBearerToken != "" {
+		req.Header.Set("Authorization", "Bearer "+e.config.HDXBearerToken)
+	} else {
+		req.SetBasicAuth(e.config.HDXUsername, e.config.HDXPassword)
+	}
 
 	resp, err := e.client.Do(req)
 	if err != nil {

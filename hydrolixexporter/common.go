@@ -6,15 +6,12 @@ import (
 	"go.opentelemetry.io/collector/pdata/pcommon"
 )
 
-// convertAttributes converts OTLP attributes to array of maps
-func convertAttributes(attrs pcommon.Map) []map[string]interface{} {
-	var tags []map[string]interface{}
+// convertAttributes converts OTLP attributes to a flat map
+func convertAttributes(attrs pcommon.Map) map[string]interface{} {
+	tags := make(map[string]interface{})
 
 	attrs.Range(func(k string, v pcommon.Value) bool {
-		tag := map[string]interface{}{
-			k: attributeValueToInterface(v),
-		}
-		tags = append(tags, tag)
+		tags[k] = attributeValueToInterface(v)
 		return true
 	})
 

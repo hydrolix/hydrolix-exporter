@@ -27,24 +27,21 @@ exporters:
     endpoint: https://your-hydrolix-cluster.hydrolix.io/ingest/event
     hdx_table: myorg.metrics
     hdx_transform: tf_otel_metrics
-    hdx_username: ${env:HYDROLIX_USERNAME}
-    hdx_password: ${env:HYDROLIX_PASSWORD}
+    hdx_bearer_token: ${env:HYDROLIX_BEARER_TOKEN}
     timeout: 30s
 
   hydrolix/traces:
     endpoint: https://your-hydrolix-cluster.hydrolix.io/ingest/event
     hdx_table: myorg.spans
     hdx_transform: tf_otel_spans
-    hdx_username: ${env:HYDROLIX_USERNAME}
-    hdx_password: ${env:HYDROLIX_PASSWORD}
+    hdx_bearer_token: ${env:HYDROLIX_BEARER_TOKEN}
     timeout: 30s
 
   hydrolix/logs:
     endpoint: https://your-hydrolix-cluster.hydrolix.io/ingest/event
     hdx_table: my_org.otel_logs
     hdx_transform: tf_otel_logs
-    hdx_username: ${env:HYDROLIX_USERNAME}
-    hdx_password: ${env:HYDROLIX_PASSWORD}
+    hdx_bearer_token: ${env:HYDROLIX_BEARER_TOKEN}
     timeout: 30s
 
 service:
