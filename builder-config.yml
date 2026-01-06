@@ -5,7 +5,7 @@ dist:
   otelcol_version: 0.141.0
 
 exporters:
-  - gomod: github.com/hydrolix/hydrolix-exporter/hydrolixexporter v1.0.0
+  - gomod: github.com/hydrolix/hydrolix-exporter/hydrolixexporter v1.0.1
     path: ./hydrolixexporter
 
   # Core exporters
