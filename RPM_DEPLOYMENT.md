@@ -176,7 +176,7 @@ Add your authentication credentials:
 
 ```bash
 # Using Bearer Token (recommended)
-HYDROLIX_BEARER_TOKEN=your-jwt-token-here
+HYDROLIX_BEARER_TOKEN=your-token-here
 
 # OR using Basic Authentication
 # HYDROLIX_USERNAME=your-username
