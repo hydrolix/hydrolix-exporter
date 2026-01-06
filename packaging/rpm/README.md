@@ -19,7 +19,7 @@ See the [RPM Deployment Guide](../../RPM_DEPLOYMENT.md) for complete instruction
 rpmdev-setuptree
 
 # Create source tarball
-VERSION=1.0.0
+VERSION=1.0.1
 cd ../..
 tar czf ~/rpmbuild/SOURCES/otelcol-hydrolix-${VERSION}.tar.gz \
   --transform "s,^hydrolix-exporter,otelcol-hydrolix-${VERSION}," \
