@@ -48,7 +48,7 @@ git clone https://github.com/hydrolix/hydrolix-exporter.git
 cd hydrolix-exporter
 
 # Create version variable
-VERSION=1.0.0
+VERSION=1.0.1
 
 # Create tarball
 cd ..
@@ -75,7 +75,7 @@ rpmbuild -bb ~/rpmbuild/SPECS/otelcol-hydrolix.spec
 
 The built RPM will be located at:
 ```
-~/rpmbuild/RPMS/x86_64/otelcol-hydrolix-1.0.0-1.el8.x86_64.rpm
+~/rpmbuild/RPMS/x86_64/otelcol-hydrolix-1.0.1-1.el8.x86_64.rpm
 ```
 
 ## Installation
@@ -83,13 +83,13 @@ The built RPM will be located at:
 ### Install the RPM
 
 ```bash
-sudo rpm -ivh ~/rpmbuild/RPMS/x86_64/otelcol-hydrolix-1.0.0-1.el8.x86_64.rpm
+sudo rpm -ivh ~/rpmbuild/RPMS/x86_64/otelcol-hydrolix-1.0.1-1.el8.x86_64.rpm
 ```
 
 Or using yum/dnf:
 
 ```bash
-sudo yum localinstall ~/rpmbuild/RPMS/x86_64/otelcol-hydrolix-1.0.0-1.el8.x86_64.rpm
+sudo yum localinstall ~/rpmbuild/RPMS/x86_64/otelcol-hydrolix-1.0.1-1.el8.x86_64.rpm
 ```
 
 ### Post-Installation Configuration

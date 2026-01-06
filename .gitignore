@@ -12,3 +12,4 @@ rpmbuild/
 *credentials*.yaml
 *credentials*.conf
 !packaging/rpm/otelcol-hydrolix.conf
+.local

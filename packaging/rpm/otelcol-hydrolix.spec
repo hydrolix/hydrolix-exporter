@@ -1,5 +1,5 @@
 Name:           otelcol-hydrolix
-Version:        1.0.0
+Version:        1.0.1
 Release:        1%{?dist}
 Summary:        OpenTelemetry Collector with Hydrolix Exporter
 
@@ -68,6 +68,10 @@ exit 0
 %dir %attr(0755, otelcol, otelcol) %{_localstatedir}/log/otelcol-hydrolix
 
 %changelog
+* Sun Jan 05 2025 Your Name <your.email@example.com> - 1.0.1-1
+- Added all OpenTelemetry Collector Contrib components
+- Includes kubeletstats receiver, filter processor, and 100+ other components
+
 * Sun Dec 22 2024 Your Name <your.email@example.com> - 1.0.0-1
 - Initial RPM release
 - Includes Hydrolix exporter for metrics, traces, and logs
