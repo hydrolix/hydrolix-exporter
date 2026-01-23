@@ -12,7 +12,10 @@ WORKDIR /build
 
 # Copy the builder configuration and exporter source
 COPY builder-config.yml .
-COPY hydrolixexporter/ ./hydrolixexporter/
+COPY *.go ./
+COPY go.mod go.sum ./
+COPY internal/ ./internal/
+COPY metadata.yaml ./
 
 # Build the custom collector
 RUN ocb --config builder-config.yml
