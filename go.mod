@@ -1,4 +1,4 @@
-module github.com/hydrolix/hydrolix-exporter/hydrolixexporter
+module github.com/hydrolix/hydrolix-exporter
 
 go 1.25.3
 
@@ -7,10 +7,13 @@ require (
 	go.opentelemetry.io/collector/component v1.44.0
 	go.opentelemetry.io/collector/component/componenttest v0.138.0
 	go.opentelemetry.io/collector/config/confighttp v0.138.0
+	go.opentelemetry.io/collector/confmap v1.44.0
 	go.opentelemetry.io/collector/exporter v1.44.0
 	go.opentelemetry.io/collector/exporter/exporterhelper v0.138.0
 	go.opentelemetry.io/collector/exporter/exportertest v0.138.0
 	go.opentelemetry.io/collector/pdata v1.44.0
+	go.uber.org/goleak v1.3.0
+	go.uber.org/zap v1.27.0
 )
 
 require (
@@ -49,7 +52,6 @@ require (
 	go.opentelemetry.io/collector/config/configoptional v1.44.0 // indirect
 	go.opentelemetry.io/collector/config/configretry v1.44.0 // indirect
 	go.opentelemetry.io/collector/config/configtls v1.44.0 // indirect
-	go.opentelemetry.io/collector/confmap v1.44.0 // indirect
 	go.opentelemetry.io/collector/confmap/xconfmap v0.138.0 // indirect
 	go.opentelemetry.io/collector/consumer v1.44.0 // indirect
 	go.opentelemetry.io/collector/consumer/consumererror v0.138.0 // indirect
@@ -77,7 +79,6 @@ require (
 	go.opentelemetry.io/otel/sdk/metric v1.38.0 // indirect
 	go.opentelemetry.io/otel/trace v1.38.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	go.uber.org/zap v1.27.0 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
 	golang.org/x/crypto v0.41.0 // indirect
 	golang.org/x/net v0.43.0 // indirect
