@@ -14,7 +14,6 @@ WORKDIR /build
 COPY builder-config.yml .
 COPY *.go ./
 COPY go.mod go.sum ./
-COPY internal/ ./internal/
 COPY metadata.yaml ./
 
 # Build the custom collector
