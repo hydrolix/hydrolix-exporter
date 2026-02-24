@@ -14,7 +14,6 @@ WORKDIR /build
 COPY builder-config.yml .
 COPY *.go ./
 COPY go.mod go.sum ./
-COPY metadata.yaml ./
 
 # Build the custom collector
 RUN ocb --config builder-config.yml
