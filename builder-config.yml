@@ -1,7 +1,7 @@
 dist:
   name: otelcol-hydrolix
   description: OpenTelemetry Collector Contrib with Hydrolix Exporter
-  output_path: .
+  output_path: ./dist
   otelcol_version: 0.141.0
 
 exporters:
