@@ -13,7 +13,6 @@ WORKDIR /build
 # Copy the builder configuration and exporter source
 COPY builder-config.yml .
 COPY go.mod go.sum ./exporter/
-RUN sed -i 's|^module github\.com/hydrolix/hydrolix-exporter$|module github.com/hydrolix/hydrolix-exporter/hydrolixexporter|' ./exporter/go.mod
 COPY *.go ./exporter/
 
 # Build the custom collector
