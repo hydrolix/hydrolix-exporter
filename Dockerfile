@@ -12,8 +12,8 @@ WORKDIR /build
 
 # Copy the builder configuration and exporter source
 COPY builder-config.yml .
-COPY *.go ./
-COPY go.mod go.sum ./
+COPY *.go ./exporter/
+COPY go.mod go.sum ./exporter/
 
 # Build the custom collector
 RUN ocb --config builder-config.yml
