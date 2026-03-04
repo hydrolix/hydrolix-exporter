@@ -1,0 +1,16 @@
+name: Push
+
+on: [push]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-dockerfile:
+    name: Build dockerfile
+    runs-on: quay.io/podman/stable:v5.5.2
+    steps:
+      - name: Build image
+        run: |
+          podman build .
