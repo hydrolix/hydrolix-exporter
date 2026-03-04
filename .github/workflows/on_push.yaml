@@ -25,12 +25,12 @@ jobs:
   build-dockerfile:
     name: Build dockerfile
     runs-on: ubuntu-latest
-    container:
-      image: quay.io/podman/stable:v5.5.2
-      options: --privileged
     steps:
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache
+          df -h
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Build image
-        run: |
-          podman build .
+        run: podman build .
