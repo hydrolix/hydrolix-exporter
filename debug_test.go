@@ -62,20 +62,13 @@ func TestDebugMetricWithTraceContext(t *testing.T) {
 	require.NoError(t, err)
 	t.Logf("JSON payload that would be sent to Hydrolix:\n%s", string(jsonData))
 
-	// Verify trace_id is in the tags array
-	foundTraceID := false
-	foundSpanID := false
-	for _, tag := range result[0].MetricAttributes {
-		if val, ok := tag["trace_id"]; ok {
-			foundTraceID = true
-			assert.Equal(t, "fd700fd4e084e765d90a54a0412616b7", val)
-		}
-		if val, ok := tag["span_id"]; ok {
-			foundSpanID = true
-			assert.Equal(t, "53e89fb8c3aaac01", val)
-		}
-	}
+	// Verify trace_id is in the tags map
+	attrs := result[0].MetricAttributes
+	traceID, foundTraceID := attrs["trace_id"]
+	assert.True(t, foundTraceID, "trace_id should be in tags")
+	assert.Equal(t, "fd700fd4e084e765d90a54a0412616b7", traceID)
 
-	assert.True(t, foundTraceID, "trace_id should be in tags array")
-	assert.True(t, foundSpanID, "span_id should be in tags array")
+	spanID, foundSpanID := attrs["span_id"]
+	assert.True(t, foundSpanID, "span_id should be in tags")
+	assert.Equal(t, "53e89fb8c3aaac01", spanID)
 }
