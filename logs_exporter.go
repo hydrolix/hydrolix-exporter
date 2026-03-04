@@ -8,15 +8,17 @@ import (
 	"io"
 	"net/http"
 
+	"go.opentelemetry.io/collector/component"
 	"go.opentelemetry.io/collector/exporter"
 	"go.opentelemetry.io/collector/pdata/plog"
 	"go.uber.org/zap"
 )
 
 type logsExporter struct {
-	config *Config
-	client *http.Client
-	logger *zap.Logger
+	config   *Config
+	settings exporter.Settings
+	client   *http.Client
+	logger   *zap.Logger
 }
 
 type HydrolixLog struct {
@@ -45,10 +47,19 @@ type HydrolixLog struct {
 
 func newLogsExporter(config *Config, set exporter.Settings) *logsExporter {
 	return &logsExporter{
-		config: config,
-		client: &http.Client{Timeout: config.Timeout},
-		logger: set.Logger,
+		config:   config,
+		settings: set,
+		logger:   set.Logger,
 	}
+}
+
+func (e *logsExporter) start(ctx context.Context, host component.Host) error {
+	client, err := e.config.ClientConfig.ToClient(ctx, host.GetExtensions(), e.settings.TelemetrySettings)
+	if err != nil {
+		return err
+	}
+	e.client = client
+	return nil
 }
 
 func (e *logsExporter) pushLogs(ctx context.Context, ld plog.Logs) error {
