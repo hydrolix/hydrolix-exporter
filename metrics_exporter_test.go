@@ -15,6 +15,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.opentelemetry.io/collector/component"
+	"go.opentelemetry.io/collector/component/componenttest"
 	"go.opentelemetry.io/collector/config/confighttp"
 	"go.opentelemetry.io/collector/exporter/exportertest"
 	"go.opentelemetry.io/collector/pdata/pcommon"
@@ -178,8 +179,11 @@ func TestMetricsExporter_PushMetrics(t *testing.T) {
 
 	exporter := newMetricsExporter(cfg, exportertest.NewNopSettings(component.MustNewType("hydrolix")))
 
+	err := exporter.start(context.Background(), componenttest.NewNopHost())
+	require.NoError(t, err)
+
 	// Push metrics
-	err := exporter.pushMetrics(context.Background(), metrics)
+	err = exporter.pushMetrics(context.Background(), metrics)
 	require.NoError(t, err)
 
 	// Verify received data
@@ -223,7 +227,10 @@ func TestMetricsExporter_PushMetricsError(t *testing.T) {
 	}
 
 	exporter := newMetricsExporter(cfg, exportertest.NewNopSettings(component.MustNewType("hydrolix")))
-	err := exporter.pushMetrics(context.Background(), metrics)
+	err := exporter.start(context.Background(), componenttest.NewNopHost())
+	require.NoError(t, err)
+
+	err = exporter.pushMetrics(context.Background(), metrics)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "unexpected status code")
 }

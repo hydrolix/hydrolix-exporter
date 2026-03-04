@@ -196,7 +196,10 @@ func TestLogsExporter_PushLogsError(t *testing.T) {
 	}
 
 	exporter := newLogsExporter(cfg, exportertest.NewNopSettings(component.MustNewType("hydrolix")))
-	err := exporter.pushLogs(context.Background(), logs)
+	err := exporter.start(context.Background(), componenttest.NewNopHost())
+	require.NoError(t, err)
+
+	err = exporter.pushLogs(context.Background(), logs)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "unexpected status code")
 }
