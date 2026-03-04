@@ -80,7 +80,7 @@ func newMetricsExporter(config *Config, set exporter.Settings) *metricsExporter 
 }
 
 func (e *metricsExporter) start(ctx context.Context, host component.Host) error {
-	client, err := e.config.ClientConfig.ToClient(ctx, host, e.settings.TelemetrySettings)
+	client, err := e.config.ClientConfig.ToClient(ctx, host.GetExtensions(), e.settings.TelemetrySettings)
 	if err != nil {
 		return err
 	}
