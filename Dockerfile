@@ -1,5 +1,5 @@
 # Stage 1: Build the custom collector
-FROM --platform=$BUILDPLATFORM golang:1.25.3 AS builder
+FROM --platform=$BUILDPLATFORM docker.io/library/golang:1.25.3 AS builder
 
 ARG TARGETARCH
 ARG OCB_VERSION=0.141.0
@@ -18,7 +18,7 @@ COPY *.go ./exporter/
 RUN GOARCH=${TARGETARCH} ocb --config builder-config.yml
 
 # Stage 2: Runtime image
-FROM alpine:latest
+FROM docker.io/library/alpine:latest
 
 RUN apk --no-cache add ca-certificates
 

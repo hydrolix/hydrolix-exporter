@@ -9,6 +9,7 @@ import (
 	"io"
 	"net/http"
 
+	"go.opentelemetry.io/collector/component"
 	"go.opentelemetry.io/collector/exporter"
 	"go.opentelemetry.io/collector/pdata/pcommon"
 	"go.opentelemetry.io/collector/pdata/pmetric"
@@ -16,9 +17,10 @@ import (
 )
 
 type metricsExporter struct {
-	config *Config
-	client *http.Client
-	logger *zap.Logger
+	config   *Config
+	settings exporter.Settings
+	client   *http.Client
+	logger   *zap.Logger
 }
 
 type HydrolixMetric struct {
@@ -71,10 +73,19 @@ type Exemplar struct {
 
 func newMetricsExporter(config *Config, set exporter.Settings) *metricsExporter {
 	return &metricsExporter{
-		config: config,
-		client: &http.Client{Timeout: config.Timeout},
-		logger: set.Logger,
+		config:   config,
+		settings: set,
+		logger:   set.Logger,
 	}
+}
+
+func (e *metricsExporter) start(ctx context.Context, host component.Host) error {
+	client, err := e.config.ClientConfig.ToClient(ctx, host.GetExtensions(), e.settings.TelemetrySettings)
+	if err != nil {
+		return err
+	}
+	e.client = client
+	return nil
 }
 
 func (e *metricsExporter) pushMetrics(ctx context.Context, md pmetric.Metrics) error {

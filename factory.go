@@ -4,7 +4,9 @@ import (
 	"context"
 
 	"go.opentelemetry.io/collector/component"
+	"go.opentelemetry.io/collector/config/configcompression"
 	"go.opentelemetry.io/collector/config/confighttp"
+	"go.opentelemetry.io/collector/config/configretry"
 	"go.opentelemetry.io/collector/exporter"
 	"go.opentelemetry.io/collector/exporter/exporterhelper"
 )
@@ -24,8 +26,20 @@ func NewFactory() exporter.Factory {
 }
 
 func createDefaultConfig() component.Config {
+	clientConfig := confighttp.NewDefaultClientConfig()
+	clientConfig.Compression = configcompression.TypeGzip
 	return &Config{
-		ClientConfig: confighttp.NewDefaultClientConfig(),
+		ClientConfig: clientConfig,
+		RetryConfig:  configretry.NewDefaultBackOffConfig(),
+		QueueConfig:  exporterhelper.NewDefaultQueueConfig(),
+	}
+}
+
+func exporterOptions(config *Config) []exporterhelper.Option {
+	return []exporterhelper.Option{
+		exporterhelper.WithTimeout(exporterhelper.TimeoutConfig{Timeout: config.Timeout}),
+		exporterhelper.WithRetry(config.RetryConfig),
+		exporterhelper.WithQueue(config.QueueConfig),
 	}
 }
 
@@ -37,12 +51,8 @@ func createTracesExporter(
 	config := cfg.(*Config)
 	te := newTracesExporter(config, set)
 
-	return exporterhelper.NewTraces(
-		ctx,
-		set,
-		cfg,
-		te.pushTraces,
-	)
+	opts := append(exporterOptions(config), exporterhelper.WithStart(te.start))
+	return exporterhelper.NewTraces(ctx, set, cfg, te.pushTraces, opts...)
 }
 
 func createMetricsExporter(
@@ -53,12 +63,8 @@ func createMetricsExporter(
 	config := cfg.(*Config)
 	me := newMetricsExporter(config, set)
 
-	return exporterhelper.NewMetrics(
-		ctx,
-		set,
-		cfg,
-		me.pushMetrics,
-	)
+	opts := append(exporterOptions(config), exporterhelper.WithStart(me.start))
+	return exporterhelper.NewMetrics(ctx, set, cfg, me.pushMetrics, opts...)
 }
 
 func createLogsExporter(
@@ -69,10 +75,6 @@ func createLogsExporter(
 	config := cfg.(*Config)
 	le := newLogsExporter(config, set)
 
-	return exporterhelper.NewLogs(
-		ctx,
-		set,
-		cfg,
-		le.pushLogs,
-	)
+	opts := append(exporterOptions(config), exporterhelper.WithStart(le.start))
+	return exporterhelper.NewLogs(ctx, set, cfg, le.pushLogs, opts...)
 }
