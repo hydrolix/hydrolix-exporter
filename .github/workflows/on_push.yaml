@@ -27,6 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: quay.io/podman/stable:v5.5.2
+      options: --privileged
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

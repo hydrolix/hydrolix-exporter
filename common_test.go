@@ -21,18 +21,10 @@ func TestConvertAttributes(t *testing.T) {
 
 	assert.Len(t, result, 4)
 
-	// Create a map for easy lookup
-	attrMap := make(map[string]interface{})
-	for _, tag := range result {
-		for k, v := range tag {
-			attrMap[k] = v
-		}
-	}
-
-	assert.Equal(t, "string_value", attrMap["string_key"])
-	assert.Equal(t, "42", attrMap["int_key"])
-	assert.Equal(t, "3.140000", attrMap["double_key"])
-	assert.Equal(t, "true", attrMap["bool_key"])
+	assert.Equal(t, "string_value", result["string_key"])
+	assert.Equal(t, "42", result["int_key"])
+	assert.Equal(t, "3.140000", result["double_key"])
+	assert.Equal(t, "true", result["bool_key"])
 }
 
 func TestConvertAttributesEmpty(t *testing.T) {
@@ -156,15 +148,8 @@ func TestConvertAttributesWithSpecialCharacters(t *testing.T) {
 
 	assert.Len(t, result, 2)
 
-	attrMap := make(map[string]interface{})
-	for _, tag := range result {
-		for k, v := range tag {
-			attrMap[k] = v
-		}
-	}
-
-	assert.Equal(t, "special/value", attrMap["special.key"])
-	assert.Equal(t, "测试", attrMap["unicode_key"])
+	assert.Equal(t, "special/value", result["special.key"])
+	assert.Equal(t, "测试", result["unicode_key"])
 }
 
 func TestConvertAttributesWithLargeValues(t *testing.T) {
@@ -175,6 +160,6 @@ func TestConvertAttributesWithLargeValues(t *testing.T) {
 	result := convertAttributes(attrs)
 
 	assert.Len(t, result, 1)
-	assert.Contains(t, result[0], "large_key")
-	assert.Equal(t, largeString, result[0]["large_key"])
+	assert.Contains(t, result, "large_key")
+	assert.Equal(t, largeString, result["large_key"])
 }
