@@ -15,6 +15,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.opentelemetry.io/collector/component"
+	"go.opentelemetry.io/collector/component/componenttest"
 	"go.opentelemetry.io/collector/config/confighttp"
 	"go.opentelemetry.io/collector/exporter/exportertest"
 	"go.opentelemetry.io/collector/pdata/pcommon"
@@ -150,8 +151,11 @@ func TestLogsExporter_PushLogs(t *testing.T) {
 
 	exporter := newLogsExporter(cfg, exportertest.NewNopSettings(component.MustNewType("hydrolix")))
 
+	err := exporter.start(context.Background(), componenttest.NewNopHost())
+	require.NoError(t, err)
+
 	// Push logs
-	err := exporter.pushLogs(context.Background(), logs)
+	err = exporter.pushLogs(context.Background(), logs)
 	require.NoError(t, err)
 
 	// Verify received data
