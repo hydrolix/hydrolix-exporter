@@ -87,7 +87,7 @@ spec:
     spec:
       containers:
         - name: otelcol
-          image: us-docker.pkg.dev/hdx-art/t/hdx-collector:1.0.0
+          image: us-docker.pkg.dev/hdx-art/t/hdx-collector:v1.1.0
           ports:
             - containerPort: 4317
               name: otlp-grpc

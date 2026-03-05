@@ -1,5 +1,5 @@
 Name:           otelcol-hydrolix
-Version:        1.0.1
+Version:        1.1.0
 Release:        1%{?dist}
 Summary:        OpenTelemetry Collector with Hydrolix Exporter
 

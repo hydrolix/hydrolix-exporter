@@ -12,7 +12,7 @@ with the Hydrolix exporter to Kubernetes.
 ## Step 1 (Option A): Pull the image from the GCP container registry
 
 ```bash
-docker pull us-docker.pkg.dev/hdx-art/t/hdx-collector:1.0.0
+docker pull us-docker.pkg.dev/hdx-art/t/hdx-collector:v1.1.0
 ```
 
 ## Step 1 (Option B): Build the Custom Collector Image
@@ -138,7 +138,7 @@ service:
 
 1. **Use versioned tags** instead of `latest`
    ```yaml
-   image: us-docker.pkg.dev/hdx-art/t/hdx-collector:1.0.0
+   image: us-docker.pkg.dev/hdx-art/t/hdx-collector:v1.1.0
    imagePullPolicy: IfNotPresent
    ```
 
@@ -153,7 +153,7 @@ service:
        cpu: 100m
    ```
 
-3. **Enable retry and queuing** for reliability
+3. **Retry and queuing are enabled by default** in v1.1.0 with sensible values. Override only if you need to tune them:
    ```yaml
    exporters:
      hydrolix:
@@ -167,6 +167,14 @@ service:
          enabled: true
          num_consumers: 10
          queue_size: 1000
+   ```
+
+4. **Cap batch size** for high-throughput workloads to avoid request timeouts:
+   ```yaml
+   processors:
+     batch:
+       timeout: 60s
+       send_batch_max_size: 500
    ```
 
 4. **Monitor the collector** itself
