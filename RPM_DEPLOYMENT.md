@@ -124,7 +124,7 @@ receivers:
 processors:
   batch:
     timeout: 10s
-    send_batch_size: 1000
+    send_batch_max_size: 500
 
 exporters:
   hydrolix/metrics:
@@ -169,6 +169,7 @@ service:
 Create the environment file with your credentials:
 
 ```bash
+sudo cp /etc/otelcol-hydrolix/otelcol-hydrolix.conf.example /etc/otelcol-hydrolix/otelcol-hydrolix.conf
 sudo vim /etc/otelcol-hydrolix/otelcol-hydrolix.conf
 ```
 
@@ -300,7 +301,7 @@ To upgrade to a new version:
 rpmbuild -bb ~/rpmbuild/SPECS/otelcol-hydrolix.spec
 
 # Upgrade the package
-sudo rpm -Uvh ~/rpmbuild/RPMS/x86_64/otelcol-hydrolix-0.2.0-1.el8.x86_64.rpm
+sudo rpm -Uvh ~/rpmbuild/RPMS/x86_64/otelcol-hydrolix-1.1.0-1.el8.x86_64.rpm
 
 # Restart the service
 sudo systemctl restart otelcol-hydrolix
