@@ -48,7 +48,7 @@ git clone https://github.com/hydrolix/hydrolix-exporter.git
 cd hydrolix-exporter
 
 # Create version variable
-VERSION=1.0.1
+VERSION=1.1.0
 
 # Create tarball
 cd ..
@@ -75,7 +75,7 @@ rpmbuild -bb ~/rpmbuild/SPECS/otelcol-hydrolix.spec
 
 The built RPM will be located at:
 ```
-~/rpmbuild/RPMS/x86_64/otelcol-hydrolix-1.0.1-1.el8.x86_64.rpm
+~/rpmbuild/RPMS/x86_64/otelcol-hydrolix-1.1.0-1.el8.x86_64.rpm
 ```
 
 ## Installation
@@ -83,13 +83,13 @@ The built RPM will be located at:
 ### Install the RPM
 
 ```bash
-sudo rpm -ivh ~/rpmbuild/RPMS/x86_64/otelcol-hydrolix-1.0.1-1.el8.x86_64.rpm
+sudo rpm -ivh ~/rpmbuild/RPMS/x86_64/otelcol-hydrolix-1.1.0-1.el8.x86_64.rpm
 ```
 
 Or using yum/dnf:
 
 ```bash
-sudo yum localinstall ~/rpmbuild/RPMS/x86_64/otelcol-hydrolix-1.0.1-1.el8.x86_64.rpm
+sudo yum localinstall ~/rpmbuild/RPMS/x86_64/otelcol-hydrolix-1.1.0-1.el8.x86_64.rpm
 ```
 
 ### Post-Installation Configuration
@@ -124,7 +124,7 @@ receivers:
 processors:
   batch:
     timeout: 10s
-    send_batch_size: 1000
+    send_batch_max_size: 500
 
 exporters:
   hydrolix/metrics:
@@ -169,6 +169,7 @@ service:
 Create the environment file with your credentials:
 
 ```bash
+sudo cp /etc/otelcol-hydrolix/otelcol-hydrolix.conf.example /etc/otelcol-hydrolix/otelcol-hydrolix.conf
 sudo vim /etc/otelcol-hydrolix/otelcol-hydrolix.conf
 ```
 
@@ -300,7 +301,7 @@ To upgrade to a new version:
 rpmbuild -bb ~/rpmbuild/SPECS/otelcol-hydrolix.spec
 
 # Upgrade the package
-sudo rpm -Uvh ~/rpmbuild/RPMS/x86_64/otelcol-hydrolix-0.2.0-1.el8.x86_64.rpm
+sudo rpm -Uvh ~/rpmbuild/RPMS/x86_64/otelcol-hydrolix-1.1.0-1.el8.x86_64.rpm
 
 # Restart the service
 sudo systemctl restart otelcol-hydrolix

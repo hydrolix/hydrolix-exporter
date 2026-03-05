@@ -1,5 +1,5 @@
 Name:           otelcol-hydrolix
-Version:        1.0.1
+Version:        1.1.0
 Release:        1%{?dist}
 Summary:        OpenTelemetry Collector with Hydrolix Exporter
 
@@ -20,7 +20,7 @@ OpenTelemetry Collector with custom Hydrolix exporter for metrics, traces, and l
 
 %build
 # Build the collector using ocb (OpenTelemetry Collector Builder)
-go install go.opentelemetry.io/collector/cmd/builder@v0.112.0
+go install go.opentelemetry.io/collector/cmd/builder@v0.141.0
 $HOME/go/bin/builder --config=builder-config.yml
 
 %install
@@ -31,7 +31,7 @@ install -d %{buildroot}%{_unitdir}
 install -d %{buildroot}%{_localstatedir}/log/otelcol-hydrolix
 
 # Install binary
-install -m 0755 otelcol-hydrolix/otelcol-hydrolix %{buildroot}%{_bindir}/otelcol-hydrolix
+install -m 0755 dist/otelcol-hydrolix %{buildroot}%{_bindir}/otelcol-hydrolix
 
 # Install systemd service
 install -m 0644 packaging/rpm/otelcol-hydrolix.service %{buildroot}%{_unitdir}/otelcol-hydrolix.service
@@ -68,6 +68,12 @@ exit 0
 %dir %attr(0755, otelcol, otelcol) %{_localstatedir}/log/otelcol-hydrolix
 
 %changelog
+* Thu Mar 05 2026 Your Name <your.email@example.com> - 1.1.0-1
+- Updated OCB to v0.141.0
+- Enabled gzip compression by default
+- Enabled retry on failure and sending queue by default
+- Fixed HTTP client timeout (was incorrectly defaulting to 0)
+
 * Sun Jan 05 2025 Your Name <your.email@example.com> - 1.0.1-1
 - Added all OpenTelemetry Collector Contrib components
 - Includes kubeletstats receiver, filter processor, and 100+ other components

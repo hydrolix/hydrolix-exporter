@@ -23,7 +23,11 @@ The following configuration options are supported:
 - `hdx_bearer_token` (optional): Bearer token for authentication. Takes precedence if both token and username/password are provided.
 - `hdx_username` (optional): Username for Basic Authentication.
 - `hdx_password` (optional): Password for Basic Authentication.
-- `timeout` (optional): HTTP client timeout. Default is 30s.
+- `timeout` (optional): HTTP client timeout. Default is `30s`.
+- `retry_on_failure` (optional): Retry configuration for failed exports. Enabled by default with exponential backoff (initial interval 5s, max interval 30s, max elapsed time 5m).
+- `sending_queue` (optional): Queue configuration for buffering telemetry before export. Enabled by default with 10 consumers and a queue size of 1000.
+
+Gzip compression is enabled by default, reducing payload size over the wire.
 
 **Note**: You must provide either `hdx_bearer_token` OR both `hdx_username` and `hdx_password` for authentication.
 
@@ -112,8 +116,8 @@ receivers:
 
 processors:
   batch:
-    timeout: 10s
-    send_batch_size: 1024
+    timeout: 60s
+    send_batch_max_size: 500
 
 exporters:
   hydrolix/traces:
@@ -170,13 +174,14 @@ exporters:
 
 The exporter sets the following HTTP headers on each request:
 - `Content-Type: application/json`
+- `Content-Encoding: gzip`
 - `x-hdx-table`: The configured table name
 - `x-hdx-transform`: The configured transform name
 - `Authorization`: Either `Bearer <token>` or Basic Authentication credentials
 
 ## Best Practices
 
-1. **Use the batch processor**: Always include the batch processor in your pipeline to improve performance and reduce the number of HTTP requests.
+1. **Use the batch processor**: Always include the batch processor in your pipeline. For high-throughput workloads, set `send_batch_max_size` to cap individual request sizes and avoid timeouts (e.g. `send_batch_max_size: 500`).
 
 2. **Monitor error responses**: The exporter logs detailed error messages including Hydrolix response bodies to help with troubleshooting.
 
@@ -191,7 +196,7 @@ The exporter sets the following HTTP headers on each request:
 1. Pull the image from GCP
 
     ```bash
-    docker pull us-docker.pkg.dev/hdx-art/t/hdx-collector:1.0.0
+    docker pull us-docker.pkg.dev/hdx-art/t/hdx-collector:v1.1.0
     ```
 
 1. Create a config file
@@ -220,7 +225,7 @@ The exporter sets the following HTTP headers on each request:
           -p 4318:4318 \
           -e HYDROLIX_BEARER_TOKEN \
           -v [Absolute path to your otel config]:/etc/otelcol/config.yaml \
-          us-docker.pkg.dev/hdx-art/t/hdx-collector:1.0.0
+          us-docker.pkg.dev/hdx-art/t/hdx-collector:v1.1.0
         ```
 
     1. [Option 4] Docker compose

@@ -2,6 +2,7 @@ package hydrolixexporter
 
 import (
 	"context"
+	"time"
 
 	"go.opentelemetry.io/collector/component"
 	"go.opentelemetry.io/collector/config/configcompression"
@@ -28,6 +29,10 @@ func NewFactory() exporter.Factory {
 func createDefaultConfig() component.Config {
 	clientConfig := confighttp.NewDefaultClientConfig()
 	clientConfig.Compression = configcompression.TypeGzip
+	clientConfig.Timeout = 30 * time.Second
+	// We write large JSON payloads; tuning the write buffer reduces syscall overhead.
+	// We read very little (small response body), so ReadBufferSize is left at default.
+	clientConfig.WriteBufferSize = 512 * 1024
 	return &Config{
 		ClientConfig: clientConfig,
 		RetryConfig:  configretry.NewDefaultBackOffConfig(),
