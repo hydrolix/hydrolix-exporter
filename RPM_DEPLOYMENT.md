@@ -48,7 +48,7 @@ git clone https://github.com/hydrolix/hydrolix-exporter.git
 cd hydrolix-exporter
 
 # Set version — update this for each release
-VERSION=1.1.1
+VERSION=[Your version here]
 
 # Create tarball
 cd ..
@@ -84,7 +84,7 @@ The built RPM will be located at:
 
 ```bash
 # Set version — update this to match the RPM you built
-VERSION=1.1.1
+VERSION=[Your version here]
 
 sudo rpm -ivh ~/rpmbuild/RPMS/x86_64/otelcol-hydrolix-${VERSION}-1.el8.x86_64.rpm
 ```
@@ -300,8 +300,7 @@ curl -H "Authorization: Bearer YOUR_TOKEN" \
 To upgrade to a new version:
 
 ```bash
-# Set version — update this to the new version
-VERSION=1.1.1
+VERSION=[Your version here]
 
 # Build the new RPM with updated version
 rpmbuild -bb ~/rpmbuild/SPECS/otelcol-hydrolix.spec
