@@ -47,8 +47,8 @@ Clone the repository and create a tarball:
 git clone https://github.com/hydrolix/hydrolix-exporter.git
 cd hydrolix-exporter
 
-# Create version variable
-VERSION=1.1.0
+# Set version
+VERSION=[Your version here]
 
 # Create tarball
 cd ..
@@ -75,7 +75,7 @@ rpmbuild -bb ~/rpmbuild/SPECS/otelcol-hydrolix.spec
 
 The built RPM will be located at:
 ```
-~/rpmbuild/RPMS/x86_64/otelcol-hydrolix-1.1.0-1.el8.x86_64.rpm
+~/rpmbuild/RPMS/x86_64/otelcol-hydrolix-${VERSION}-1.el8.x86_64.rpm
 ```
 
 ## Installation
@@ -83,13 +83,16 @@ The built RPM will be located at:
 ### Install the RPM
 
 ```bash
-sudo rpm -ivh ~/rpmbuild/RPMS/x86_64/otelcol-hydrolix-1.1.0-1.el8.x86_64.rpm
+# Set version — update this to match the RPM you built
+VERSION=[Your version here]
+
+sudo rpm -ivh ~/rpmbuild/RPMS/x86_64/otelcol-hydrolix-${VERSION}-1.el8.x86_64.rpm
 ```
 
 Or using yum/dnf:
 
 ```bash
-sudo yum localinstall ~/rpmbuild/RPMS/x86_64/otelcol-hydrolix-1.1.0-1.el8.x86_64.rpm
+sudo yum localinstall ~/rpmbuild/RPMS/x86_64/otelcol-hydrolix-${VERSION}-1.el8.x86_64.rpm
 ```
 
 ### Post-Installation Configuration
@@ -297,11 +300,13 @@ curl -H "Authorization: Bearer YOUR_TOKEN" \
 To upgrade to a new version:
 
 ```bash
+VERSION=[Your version here]
+
 # Build the new RPM with updated version
 rpmbuild -bb ~/rpmbuild/SPECS/otelcol-hydrolix.spec
 
 # Upgrade the package
-sudo rpm -Uvh ~/rpmbuild/RPMS/x86_64/otelcol-hydrolix-1.1.0-1.el8.x86_64.rpm
+sudo rpm -Uvh ~/rpmbuild/RPMS/x86_64/otelcol-hydrolix-${VERSION}-1.el8.x86_64.rpm
 
 # Restart the service
 sudo systemctl restart otelcol-hydrolix

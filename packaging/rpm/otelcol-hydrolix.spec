@@ -1,5 +1,5 @@
 Name:           otelcol-hydrolix
-Version:        1.1.0
+Version:        1.2.0
 Release:        1%{?dist}
 Summary:        OpenTelemetry Collector with Hydrolix Exporter
 
@@ -20,7 +20,7 @@ OpenTelemetry Collector with custom Hydrolix exporter for metrics, traces, and l
 
 %build
 # Build the collector using ocb (OpenTelemetry Collector Builder)
-go install go.opentelemetry.io/collector/cmd/builder@v0.141.0
+go install go.opentelemetry.io/collector/cmd/builder@v0.147.0
 $HOME/go/bin/builder --config=builder-config.yml
 
 %install
@@ -68,6 +68,13 @@ exit 0
 %dir %attr(0755, otelcol, otelcol) %{_localstatedir}/log/otelcol-hydrolix
 
 %changelog
+* Thu Mar 05 2026 Your Name <your.email@example.com> - 1.2.0-1
+- Updated OTel dependencies to v0.147.0/v1.53.0
+- Fixed compatibility with newer OTel versions requiring configoptional.Optional for WithQueue
+- Removed filterprocessor (Go linker bug with pkg/ottl generics in v0.147.0)
+- Removed DataDog components (caused OOM during ARM64 build)
+- Removed bigipreceiver (removed from upstream contrib)
+
 * Thu Mar 05 2026 Your Name <your.email@example.com> - 1.1.0-1
 - Updated OCB to v0.141.0
 - Enabled gzip compression by default
