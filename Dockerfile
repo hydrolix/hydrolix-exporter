@@ -2,7 +2,7 @@
 FROM --platform=$BUILDPLATFORM docker.io/library/golang:1.25.3 AS builder
 
 ARG TARGETARCH
-ARG OCB_VERSION=0.141.0
+ARG OCB_VERSION=0.147.0
 
 RUN ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/') && \
   curl --proto '=https' --tlsv1.2 -fL -o /usr/local/bin/ocb \
