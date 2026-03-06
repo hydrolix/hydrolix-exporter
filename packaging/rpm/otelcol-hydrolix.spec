@@ -20,7 +20,7 @@ OpenTelemetry Collector with custom Hydrolix exporter for metrics, traces, and l
 
 %build
 # Build the collector using ocb (OpenTelemetry Collector Builder)
-go install go.opentelemetry.io/collector/cmd/builder@v0.141.0
+go install go.opentelemetry.io/collector/cmd/builder@v0.147.0
 $HOME/go/bin/builder --config=builder-config.yml
 
 %install
