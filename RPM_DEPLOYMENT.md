@@ -47,7 +47,7 @@ Clone the repository and create a tarball:
 git clone https://github.com/hydrolix/hydrolix-exporter.git
 cd hydrolix-exporter
 
-# Set version — update this for each release
+# Set version
 VERSION=[Your version here]
 
 # Create tarball

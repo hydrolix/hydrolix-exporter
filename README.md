@@ -196,7 +196,7 @@ The exporter sets the following HTTP headers on each request:
 1. Pull the image from GCP
 
     ```bash
-    # Replace [Your version here] with the desired version, e.g. v1.1.1
+    # Replace [Your version here] with the desired version, e.g. v1.2.0
     docker pull us-docker.pkg.dev/hdx-art/t/hdx-collector:[Your version here]
     ```
 
