@@ -1,5 +1,5 @@
 Name:           otelcol-hydrolix
-Version:        1.1.0
+Version:        1.1.1
 Release:        1%{?dist}
 Summary:        OpenTelemetry Collector with Hydrolix Exporter
 
@@ -68,6 +68,9 @@ exit 0
 %dir %attr(0755, otelcol, otelcol) %{_localstatedir}/log/otelcol-hydrolix
 
 %changelog
+* Thu Mar 05 2026 Your Name <your.email@example.com> - 1.1.1-1
+- Fix compatibility with OTel collector versions that require configoptional.Optional for WithQueue
+
 * Thu Mar 05 2026 Your Name <your.email@example.com> - 1.1.0-1
 - Updated OCB to v0.141.0
 - Enabled gzip compression by default

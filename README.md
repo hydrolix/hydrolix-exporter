@@ -196,7 +196,7 @@ The exporter sets the following HTTP headers on each request:
 1. Pull the image from GCP
 
     ```bash
-    docker pull us-docker.pkg.dev/hdx-art/t/hdx-collector:v1.1.0
+    docker pull us-docker.pkg.dev/hdx-art/t/hdx-collector:v1.1.1
     ```
 
 1. Create a config file
@@ -225,7 +225,7 @@ The exporter sets the following HTTP headers on each request:
           -p 4318:4318 \
           -e HYDROLIX_BEARER_TOKEN \
           -v [Absolute path to your otel config]:/etc/otelcol/config.yaml \
-          us-docker.pkg.dev/hdx-art/t/hdx-collector:v1.1.0
+          us-docker.pkg.dev/hdx-art/t/hdx-collector:v1.1.1
         ```
 
     1. [Option 4] Docker compose
