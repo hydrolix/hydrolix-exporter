@@ -164,7 +164,6 @@ service:
          max_interval: 30s
          max_elapsed_time: 5m
        sending_queue:
-         enabled: true
          num_consumers: 10
          queue_size: 1000
    ```
