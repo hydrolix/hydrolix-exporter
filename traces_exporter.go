@@ -1,14 +1,12 @@
 package hydrolixexporter
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 
 	"go.opentelemetry.io/collector/component"
+	"go.opentelemetry.io/collector/consumer/consumererror"
 	"go.opentelemetry.io/collector/exporter"
 	"go.opentelemetry.io/collector/pdata/ptrace"
 	"go.uber.org/zap"
@@ -69,13 +67,11 @@ func (e *tracesExporter) start(ctx context.Context, host component.Host) error {
 
 func (e *tracesExporter) pushTraces(ctx context.Context, td ptrace.Traces) error {
 	spans := e.convertToHydrolixSpans(td)
-
-	jsonData, err := json.Marshal(spans)
+	sent, err := sendBatches(ctx, spans, e.config, e.client, e.logger, "traces")
 	if err != nil {
-		return fmt.Errorf("failed to marshal spans: %w", err)
+		return consumererror.NewTraces(err, subTraces(td, sent))
 	}
-
-	return e.sendToHydrolix(ctx, jsonData, e.config.HDXTable, e.config.HDXTransform)
+	return nil
 }
 
 func (e *tracesExporter) convertToHydrolixSpans(td ptrace.Traces) []HydrolixSpan {
@@ -193,40 +189,3 @@ func getStatusCodeString(code ptrace.StatusCode) string {
 	}
 }
 
-func (e *tracesExporter) sendToHydrolix(ctx context.Context, data []byte, table, transform string) error {
-	req, err := http.NewRequestWithContext(ctx, "POST", e.config.Endpoint, bytes.NewBuffer(data))
-	if err != nil {
-		return fmt.Errorf("failed to create request: %w", err)
-	}
-
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("x-hdx-table", table)
-	req.Header.Set("x-hdx-transform", transform)
-
-	// Use Bearer token if available, otherwise fall back to Basic Auth
-	if e.config.HDXBearerToken != "" {
-		req.Header.Set("Authorization", "Bearer "+e.config.HDXBearerToken)
-	} else {
-		req.SetBasicAuth(e.config.HDXUsername, e.config.HDXPassword)
-	}
-
-	resp, err := e.client.Do(req)
-	if err != nil {
-		return fmt.Errorf("failed to send request to Hydrolix: %w", err)
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode >= 300 {
-		body, readErr := io.ReadAll(resp.Body)
-		if readErr != nil {
-			return fmt.Errorf("unexpected status code: %d (failed to read response body: %v)", resp.StatusCode, readErr)
-		}
-		return fmt.Errorf("unexpected status code: %d, response: %s", resp.StatusCode, string(body))
-	}
-
-	e.logger.Debug("successfully sent traces to Hydrolix",
-		zap.String("table", table),
-		zap.String("transform", transform))
-
-	return nil
-}

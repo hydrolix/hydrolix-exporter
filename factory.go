@@ -7,7 +7,6 @@ import (
 	"go.opentelemetry.io/collector/component"
 	"go.opentelemetry.io/collector/config/configcompression"
 	"go.opentelemetry.io/collector/config/confighttp"
-	"go.opentelemetry.io/collector/config/configoptional"
 	"go.opentelemetry.io/collector/config/configretry"
 	"go.opentelemetry.io/collector/exporter"
 	"go.opentelemetry.io/collector/exporter/exporterhelper"
@@ -35,9 +34,9 @@ func createDefaultConfig() component.Config {
 	// We read very little (small response body), so ReadBufferSize is left at default.
 	clientConfig.WriteBufferSize = 512 * 1024
 	return &Config{
-		ClientConfig: clientConfig,
-		RetryConfig:  configretry.NewDefaultBackOffConfig(),
-		QueueConfig:  exporterhelper.NewDefaultQueueConfig(),
+		ClientConfig:   clientConfig,
+		RetryConfig:    configretry.NewDefaultBackOffConfig(),
+		MaxPayloadSize: defaultMaxPayloadSize,
 	}
 }
 
@@ -45,7 +44,7 @@ func exporterOptions(config *Config) []exporterhelper.Option {
 	return []exporterhelper.Option{
 		exporterhelper.WithTimeout(exporterhelper.TimeoutConfig{Timeout: config.Timeout}),
 		exporterhelper.WithRetry(config.RetryConfig),
-		exporterhelper.WithQueue(configoptional.Some(config.QueueConfig)),
+		exporterhelper.WithQueue(config.QueueConfig),
 	}
 }
 

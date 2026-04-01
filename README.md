@@ -24,8 +24,9 @@ The following configuration options are supported:
 - `hdx_username` (optional): Username for Basic Authentication.
 - `hdx_password` (optional): Password for Basic Authentication.
 - `timeout` (optional): HTTP client timeout. Default is `30s`.
+- `max_payload_size` (optional): Maximum uncompressed JSON payload size in bytes before the exporter splits a batch into multiple HTTP requests. Default is `5242880` (5MB).
 - `retry_on_failure` (optional): Retry configuration for failed exports. Enabled by default with exponential backoff (initial interval 5s, max interval 30s, max elapsed time 5m).
-- `sending_queue` (optional): Queue configuration for buffering telemetry before export. Enabled by default with 10 consumers and a queue size of 1000.
+- `sending_queue` (optional): Queue configuration for buffering telemetry before export. Disabled by default; must be explicitly configured to enable.
 
 Gzip compression is enabled by default, reducing payload size over the wire.
 
@@ -181,7 +182,7 @@ The exporter sets the following HTTP headers on each request:
 
 ## Best Practices
 
-1. **Use the batch processor**: Always include the batch processor in your pipeline. For high-throughput workloads, set `send_batch_max_size` to cap individual request sizes and avoid timeouts (e.g. `send_batch_max_size: 500`).
+1. **Use the batch processor**: Always include the batch processor in your pipeline. The exporter automatically splits large payloads into multiple HTTP requests (default threshold: 5MB), but using `send_batch_max_size` in the batch processor is still recommended to keep batches reasonable (e.g. `send_batch_max_size: 500`).
 
 2. **Monitor error responses**: The exporter logs detailed error messages including Hydrolix response bodies to help with troubleshooting.
 

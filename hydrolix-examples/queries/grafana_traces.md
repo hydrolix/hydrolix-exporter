@@ -151,14 +151,8 @@ SELECT
   statusCode,
   dateDiff('ms', startTime, endTime) AS duration,
   startTime,
-  arrayMap(
-    kv -> map('key', kv.1, 'value', kv.2),
-    CAST(tags AS Array(Tuple(String, Nullable(String))))
-  ) AS tags,
-  arrayMap(
-    kv -> map('key', kv.1, 'value', kv.2),
-    CAST(serviceTags AS Array(Tuple(String, Nullable(String))))
-  ) AS serviceTags,
+  arrayMap(key -> map('key', key, 'value',"tags"[key]), mapKeys("tags")) as tags,
+  arrayMap(key -> map('key', key, 'value',"serviceTags"[key]), mapKeys("serviceTags")) as serviceTags,
   arrayMap(
     log_item -> tuple(
       log_item['name'],
@@ -203,10 +197,7 @@ This query transforms Hydrolix span data into the format required by Grafana's T
 
    Both use the pattern:
    ```sql
-   arrayMap(
-     kv -> map('key', kv.1, 'value', kv.2),
-     CAST(tags AS Array(Tuple(String, Nullable(String))))
-   )
+   arrayMap(key -> map('key', key, 'value',"tags"[key]), mapKeys("tags"))
    ```
 
 4. **Span Logs**: Processes span events/logs with their attributes
@@ -222,6 +213,6 @@ This query transforms Hydrolix span data into the format required by Grafana's T
 
 ### Important Notes
 
-- The query converts attributes from the new flat map format (`{"key": "value"}`) to Grafana's expected array format (`[{"key": "key", "value": "value"}]`)
+- The query converts map attributes to Grafana's expected array format (`[{"key": "key", "value": "value"}]`) using `mapKeys` to iterate over the map keys
 - This maintains compatibility with Grafana's Traces UI expectations
 - Time filtering is important for query performance on large trace datasets

@@ -1,15 +1,13 @@
 package hydrolixexporter
 
 import (
-	"bytes"
 	"context"
 	"encoding/hex"
 	"encoding/json"
-	"fmt"
-	"io"
 	"net/http"
 
 	"go.opentelemetry.io/collector/component"
+	"go.opentelemetry.io/collector/consumer/consumererror"
 	"go.opentelemetry.io/collector/exporter"
 	"go.opentelemetry.io/collector/pdata/pcommon"
 	"go.opentelemetry.io/collector/pdata/pmetric"
@@ -90,46 +88,10 @@ func (e *metricsExporter) start(ctx context.Context, host component.Host) error 
 
 func (e *metricsExporter) pushMetrics(ctx context.Context, md pmetric.Metrics) error {
 	metrics := e.convertToHydrolixMetrics(md)
-
-	jsonData, err := json.Marshal(metrics)
+	sent, err := sendBatches(ctx, metrics, e.config, e.client, e.logger, "metrics")
 	if err != nil {
-		return fmt.Errorf("failed to marshal metrics: %w", err)
+		return consumererror.NewMetrics(err, subMetrics(md, sent))
 	}
-
-	req, err := http.NewRequestWithContext(ctx, "POST", e.config.Endpoint, bytes.NewBuffer(jsonData))
-	if err != nil {
-		return err
-	}
-
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("x-hdx-table", e.config.HDXTable)
-	req.Header.Set("x-hdx-transform", e.config.HDXTransform)
-
-	// Use Bearer token if available, otherwise fall back to Basic Auth
-	if e.config.HDXBearerToken != "" {
-		req.Header.Set("Authorization", "Bearer "+e.config.HDXBearerToken)
-	} else {
-		req.SetBasicAuth(e.config.HDXUsername, e.config.HDXPassword)
-	}
-
-	resp, err := e.client.Do(req)
-	if err != nil {
-		return fmt.Errorf("failed to send request to Hydrolix: %w", err)
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode >= 300 {
-		body, readErr := io.ReadAll(resp.Body)
-		if readErr != nil {
-			return fmt.Errorf("unexpected status code: %d (failed to read response body: %v)", resp.StatusCode, readErr)
-		}
-		return fmt.Errorf("unexpected status code: %d, response: %s", resp.StatusCode, string(body))
-	}
-
-	e.logger.Debug("successfully sent metrics to Hydrolix",
-		zap.Int("metric_count", len(metrics)),
-		zap.String("table", e.config.HDXTable))
-
 	return nil
 }
 

@@ -1,14 +1,11 @@
 package hydrolixexporter
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
-	"fmt"
-	"io"
 	"net/http"
 
 	"go.opentelemetry.io/collector/component"
+	"go.opentelemetry.io/collector/consumer/consumererror"
 	"go.opentelemetry.io/collector/exporter"
 	"go.opentelemetry.io/collector/pdata/plog"
 	"go.uber.org/zap"
@@ -64,46 +61,10 @@ func (e *logsExporter) start(ctx context.Context, host component.Host) error {
 
 func (e *logsExporter) pushLogs(ctx context.Context, ld plog.Logs) error {
 	logs := e.convertToHydrolixLogs(ld)
-
-	jsonData, err := json.Marshal(logs)
+	sent, err := sendBatches(ctx, logs, e.config, e.client, e.logger, "logs")
 	if err != nil {
-		return fmt.Errorf("failed to marshal logs: %w", err)
+		return consumererror.NewLogs(err, subLogs(ld, sent))
 	}
-
-	req, err := http.NewRequestWithContext(ctx, "POST", e.config.Endpoint, bytes.NewBuffer(jsonData))
-	if err != nil {
-		return err
-	}
-
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("x-hdx-table", e.config.HDXTable)
-	req.Header.Set("x-hdx-transform", e.config.HDXTransform)
-
-	// Use Bearer token if available, otherwise fall back to Basic Auth
-	if e.config.HDXBearerToken != "" {
-		req.Header.Set("Authorization", "Bearer "+e.config.HDXBearerToken)
-	} else {
-		req.SetBasicAuth(e.config.HDXUsername, e.config.HDXPassword)
-	}
-
-	resp, err := e.client.Do(req)
-	if err != nil {
-		return fmt.Errorf("failed to send request to Hydrolix: %w", err)
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode >= 300 {
-		body, readErr := io.ReadAll(resp.Body)
-		if readErr != nil {
-			return fmt.Errorf("unexpected status code: %d (failed to read response body: %v)", resp.StatusCode, readErr)
-		}
-		return fmt.Errorf("unexpected status code: %d, response: %s", resp.StatusCode, string(body))
-	}
-
-	e.logger.Debug("successfully sent logs to Hydrolix",
-		zap.Int("log_count", len(logs)),
-		zap.String("table", e.config.HDXTable))
-
 	return nil
 }
 
