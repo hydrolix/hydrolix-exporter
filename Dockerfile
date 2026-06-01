@@ -1,5 +1,5 @@
 # Stage 1: Build the custom collector
-FROM --platform=$BUILDPLATFORM docker.io/library/golang:1.25.3 AS builder
+FROM --platform=$BUILDPLATFORM docker.io/library/golang:1.25.8 AS builder
 
 ARG TARGETARCH
 ARG OCB_VERSION=0.147.0
