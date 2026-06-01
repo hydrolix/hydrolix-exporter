@@ -1,7 +1,7 @@
 # Stage 1: Build the custom collector
 FROM --platform=$BUILDPLATFORM docker.io/library/golang:1.25.8 AS builder
 
-ARG TARGETARCH=amd64
+ARG TARGETARCH
 ARG OCB_VERSION=0.147.0
 
 RUN ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/') && \
