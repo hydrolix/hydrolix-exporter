@@ -2,6 +2,7 @@
 .env
 # local test config
 local.yaml
+local-standard.yaml
 logs.txt
 
 # RPM build artifacts
