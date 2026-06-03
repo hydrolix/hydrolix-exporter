@@ -6,7 +6,7 @@ dist:
 
 exporters:
   # Custom Hydrolix exporter
-  - gomod: github.com/hydrolix/hydrolix-exporter/hydrolixexporter v1.2.0
+  - gomod: github.com/hydrolix/hydrolix-exporter/hydrolixexporter v1.2.1
     path: ./exporter
 
   - gomod: go.opentelemetry.io/collector/exporter/debugexporter v0.147.0
