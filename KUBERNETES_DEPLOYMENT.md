@@ -12,7 +12,7 @@ with the Hydrolix exporter to Kubernetes.
 ## Step 1 (Option A): Pull the image from the GCP container registry
 
 ```bash
-docker pull us-docker.pkg.dev/hdx-art/t/hdx-collector:$VERSION
+docker pull us-docker.pkg.dev/hdx-art/open-source/hdx-collector:$VERSION
 ```
 
 ## Step 1 (Option B): Build the Custom Collector Image
@@ -138,7 +138,7 @@ service:
 
 1. **Use versioned tags** instead of `latest`
    ```yaml
-   image: us-docker.pkg.dev/hdx-art/t/hdx-collector:[Your version here]
+   image: us-docker.pkg.dev/hdx-art/open-source/hdx-collector:[Your version here]
    imagePullPolicy: IfNotPresent
    ```
 
